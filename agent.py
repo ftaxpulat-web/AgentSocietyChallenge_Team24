@@ -56,117 +56,222 @@ class ReasoningBaseline(ReasoningBase):
 
 
 class MySimulationAgent(SimulationAgent):
-    """Participant's implementation of SimulationAgent."""
-    
+    """Participant's implementation of SimulationAgent with a 3-stage pipeline."""
+
     def __init__(self, llm: LLMBase):
         """Initialize MySimulationAgent"""
         super().__init__(llm=llm)
         self.planning = PlanningBaseline(llm=self.llm)
         self.reasoning = ReasoningBaseline(profile_type_prompt='', llm=self.llm)
-        self.memory = MemoryDILU(llm=self.llm)
-        
+        self.memory = DummyMemory()#MemoryDILU(llm=self.llm)
+
+    # ---------- Helper: safe LLM call with one prompt string ----------
+    def _call_llm(self, prompt: str) -> str:
+        messages = [{"role": "user", "content": prompt}]
+        result = self.llm(
+            messages=messages,
+            temperature=0.4,   # a bit of creativity, but not too wild
+            max_tokens=512
+        )
+        if not isinstance(result, str):
+            print("LLM returned non-string:", repr(result))
+            return ""
+        return result.strip()
+
+    # ---------- Stage 1: Persona & style inference ----------
+    def _stage1_persona(self, user, user_reviews: list) -> str:
+        """
+        Build a textual persona summary for the user based on their past reviews.
+        """
+        # Use up to K user reviews to keep prompt manageable
+        K = 5
+        selected_reviews = user_reviews[:K]
+        reviews_text_block = "\n\n".join(
+            f"- Review {i+1} (stars: {r.get('stars', 'N/A')}): {r.get('text', '')}"
+            for i, r in enumerate(selected_reviews)
+        )
+        if not reviews_text_block:
+            reviews_text_block = "The user has no prior reviews."
+
+        prompt = f"""
+You are analyzing a Yelp user's historical behavior.
+
+User profile:
+{user}
+
+Here are some of the user's past reviews and ratings:
+{reviews_text_block}
+
+Your task:
+1. Summarize this user's typical preferences (e.g., what they care about most).
+2. Summarize their typical tone and writing style (e.g., funny, blunt, detailed).
+3. Summarize their usual rating behavior (e.g., usually gives 4-5 stars, harsh with 1-2 stars, etc.).
+
+Output your answer as 2-4 sentences in plain English, addressing all three points.
+"""
+        persona = self._call_llm(prompt)
+        # Optionally store persona in memory for reuse
+        self.memory(f"persona: {persona}")
+        return persona
+
+    # ---------- Stage 2: Rating & content planning ----------
+    def _stage2_rating_plan(self, persona: str, user, business, similar_reviews_text: str) -> str:
+        """
+        Decide on rating and outline main points to mention in the review.
+        Returns the raw LLM plan output (we'll parse rating later).
+        """
+        prompt = f"""
+You are simulating a real human Yelp user writing a new review.
+
+User persona (based on their historical behavior):
+{persona}
+
+Business to review:
+{business}
+
+Some relevant reviews about this business from other users:
+{similar_reviews_text}
+
+Your tasks:
+1. Decide what star rating this user would likely give this business, as one of {{1.0, 2.0, 3.0, 4.0, 5.0}}.
+2. Explain briefly why, in terms of how this business meets or fails their preferences (from the persona).
+3. Outline 3-5 specific points that the user would mention in their review (bullet points).
+
+You MUST output in exactly the following format:
+
+rating: [one of 1.0, 2.0, 3.0, 4.0, 5.0]
+explanation: [1-2 sentences explaining the rating]
+outline:
+- [point 1]
+- [point 2]
+- [point 3]
+[optional more bullet points]
+
+Do not include any other sections or headings.
+"""
+        plan = self._call_llm(prompt)
+        return plan
+
+    def _parse_rating_from_plan(self, plan: str) -> float:
+        """
+        Extract numeric rating from the Stage 2 plan.
+        """
+        if not plan:
+            return 0.0
+        lines = plan.splitlines()
+        rating_lines = [line for line in lines if "rating:" in line]
+        if not rating_lines:
+            print("Could not find rating line in plan:\n", plan)
+            return 0.0
+        rating_line = rating_lines[0]
+        try:
+            rating_str = rating_line.split(":", 1)[1].strip()
+            rating_val = float(rating_str)
+            if rating_val not in {1.0, 2.0, 3.0, 4.0, 5.0}:
+                print("Parsed rating not in allowed set:", rating_val)
+                return 0.0
+            return rating_val
+        except Exception as e:
+            print("Error parsing rating from line:", rating_line, "error:", e)
+            return 0.0
+
+    # ---------- Stage 3: Final review generation ----------
+    def _stage3_final_review(self, persona: str, business, rating: float, plan: str) -> str:
+        """
+        Turn rating + persona + outline into final 2-4 sentence review text.
+        """
+        prompt = f"""
+You are simulating a real human Yelp user writing a review.
+
+User persona:
+{persona}
+
+Business:
+{business}
+
+Planned rating: {rating}
+Review plan (reasoning and bullet points):
+{plan}
+
+Write the FINAL review text that this user would post on Yelp, following these rules:
+- 2-4 sentences.
+- Match the user's tone and style from the persona.
+- Focus on specific details about the business (not generic comments).
+- Be consistent with the planned rating and reasoning.
+
+You MUST output ONLY the review text, with no extra labels or explanation.
+"""
+        review_text = self._call_llm(prompt)
+        if len(review_text) > 512:
+            review_text = review_text[:512]
+        return review_text
+
+    # ---------- Main workflow ----------
     def workflow(self):
         """
-        Simulate user behavior
-        Returns:
-            tuple: (star (float), useful (float), funny (float), cool (float), review_text (str))
+        Simulate user behavior with 3-stage pipeline:
+        1) Persona inference  2) Rating plan  3) Final review
         """
         try:
-            plan = self.planning(task_description=self.task)
+            # Basic retrieval
+            user_obj = self.interaction_tool.get_user(user_id=self.task['user_id'])
+            business_obj = self.interaction_tool.get_item(item_id=self.task['item_id'])
 
-            for sub_task in plan:
-                if 'user' in sub_task['description']:
-                    user = str(self.interaction_tool.get_user(user_id=self.task['user_id']))
-                elif 'business' in sub_task['description']:
-                    business = str(self.interaction_tool.get_item(item_id=self.task['item_id']))
+            user = str(user_obj)
+            business = str(business_obj)
+
+            # Collect item reviews (for memory and "similar reviews")
             reviews_item = self.interaction_tool.get_reviews(item_id=self.task['item_id'])
             for review in reviews_item:
-                review_text = review['text']
-                self.memory(f'review: {review_text}')
+                self.memory(f'review: {review.get("text", "")}')
+
+            # Collect user reviews (for persona)
             reviews_user = self.interaction_tool.get_reviews(user_id=self.task['user_id'])
-            if reviews_user:
-                review_similar = self.memory(f'{reviews_user[0]["text"]}')
-            else:
-                review_similar = ""  # or ask MemoryDILU with some default / skip this part
+            # Stage 1: Persona
+            persona = self._stage1_persona(user=user, user_reviews=reviews_user)
 
-            task_description = f'''
-            You are a real human user on Yelp, a platform for crowd-sourced business reviews. Here is your Yelp profile and review history: {user}
+            # Build a short similar-review text block for the item
+            K_sim = 3
+            selected_item_reviews = reviews_item[:K_sim]
+            similar_reviews_text = "\n\n".join(
+                f"- Review {i+1} (stars: {r.get('stars', 'N/A')}): {r.get('text', '')}"
+                for i, r in enumerate(selected_item_reviews)
+            )
+            if not similar_reviews_text:
+                similar_reviews_text = "There are no prior reviews available for this business."
 
-            You need to write a review for this business: {business}
+            # Stage 2: Rating + plan
+            plan = self._stage2_rating_plan(
+                persona=persona,
+                user=user,
+                business=business,
+                similar_reviews_text=similar_reviews_text
+            )
+            rating = self._parse_rating_from_plan(plan)
+            if rating == 0.0:
+                # Fallback to neutral rating if parse fails
+                rating = 3.0
 
-            Others have reviewed this business before: {review_similar}
-
-            Please analyze the following aspects carefully:
-            1. Based on your user profile and review style, what rating would you give this business? Remember that many users give 5-star ratings for excellent experiences that exceed expectations, and 1-star ratings for very poor experiences that fail to meet basic standards.
-            2. Given the business details and your past experiences, what specific aspects would you comment on? Focus on the positive aspects that make this business stand out or negative aspects that severely impact the experience.
-            3. Consider how other users might engage with your review in terms of:
-            - Useful: How informative and helpful is your review?
-            - Funny: Does your review have any humorous or entertaining elements?
-            - Cool: Is your review particularly insightful or praiseworthy?
-
-            Requirements:
-            - Star rating must be one of: 1.0, 2.0, 3.0, 4.0, 5.0
-            - If the business meets or exceeds expectations in key areas, consider giving a 5-star rating
-            - If the business fails significantly in key areas, consider giving a 1-star rating
-            - Review text should be 2-4 sentences, focusing on your personal experience and emotional response
-            - Useful/funny/cool counts should be non-negative integers that reflect likely user engagement
-            - Maintain consistency with your historical review style and rating patterns
-            - Focus on specific details about the business rather than generic comments
-            - Be generous with ratings when businesses deliver quality service and products
-            - Be critical when businesses fail to meet basic standards
-
-            You MUST output in exactly the following format, with nothing before or after:
-
-            stars: [one of 1.0, 2.0, 3.0, 4.0, 5.0]
-            review: [your review in 2–4 sentences]
-
-            Do not output any other text.
-            '''
-            result = self.reasoning(task_description)
-
-            if not isinstance(result, str) or not result.strip():
-                print("LLM returned empty or non-string result:", repr(result))
-                return {
-                    "stars": 0.0,
-                    "review": "",
-                }
-
-            lines = result.splitlines()
-            stars_lines = [line for line in lines if "stars:" in line]
-            review_lines = [line for line in lines if "review:" in line]
-
-            if not stars_lines or not review_lines:
-                print("Parse error, raw LLM output:\n", result)
-                return {
-                    "stars": 0.0,
-                    "review": "",
-                }
-
-            stars_line = stars_lines[0]
-            review_line = review_lines[0]
-
-            try:
-                stars = float(stars_line.split(":", 1)[1].strip())
-            except Exception as e:
-                print("Error parsing stars from line:", stars_line, "error:", e)
-                stars = 0.0
-
-            review_text = review_line.split(":", 1)[1].strip()
-
-            if len(review_text) > 512:
-                review_text = review_text[:512]
+            # Stage 3: Final review text
+            final_review = self._stage3_final_review(
+                persona=persona,
+                business=business,
+                rating=rating,
+                plan=plan
+            )
 
             return {
-                "stars": stars,
-                "review": review_text,
+                "stars": float(rating),
+                "review": final_review
             }
 
         except Exception as e:
             print(f"Error in workflow: {e}")
             return {
-                "stars": 0,
+                "stars": 0.0,
                 "review": ""
             }
+
 class DummyLLM(LLMBase):
     def __init__(self, model: str = "dummy"):
         super().__init__(model=model)
@@ -177,6 +282,18 @@ class DummyLLM(LLMBase):
 
     def get_embedding_model(self):
         return None
+class DummyMemory:
+    """Minimal no-op memory used to avoid heavy embedding calls during debugging."""
+
+    def __init__(self):
+        self.store = []
+
+    def __call__(self, current_situation: str = ""):
+        # Just record the text; don't do any embedding or retrieval.
+        if current_situation:
+            self.store.append(current_situation)
+        # Return empty or some trivial string; MemoryDILU callers usually expect a string.
+        return ""
     
 from typing import List, Dict, Any, Optional
 import os
@@ -185,22 +302,47 @@ from google import genai
 from websocietysimulator.llm import LLMBase
 
 
+from typing import List
+
 class GeminiEmbeddingModel:
-    """Tiny wrapper for Gemini embeddings, used by MemoryDILU if needed."""
+    """Wrapper for Gemini embeddings, compatible with MemoryDILU expectations."""
     def __init__(self, client: genai.Client, model: str = "text-embedding-004"):
         self.client = client
         self.model = model
 
+    # Optional: keep your original single-text helper
     def embed(self, text: str) -> List[float]:
-        # You can adjust this depending on how MemoryDILU expects to be called
+        if not text:
+            return []
         resp = self.client.models.embed_content(
             model=self.model,
             contents=text,
         )
-        # SDK returns something like resp.embeddings[0].values
         return resp.embeddings[0].values
 
+    # --- NEW: what MemoryDILU expects ---
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        """Embed a list of documents (list of strings)."""
+        vectors: List[List[float]] = []
+        for t in texts:
+            if not t:
+                vectors.append([])
+                continue
+            resp = self.client.models.embed_content(
+                model=self.model,
+                contents=t,
+            )
+            vectors.append(resp.embeddings[0].values)
+        return vectors
+
+    def embed_query(self, text: str) -> List[float]:
+        """Embed a single query string."""
+        # You can delegate to embed_documents for consistency
+        return self.embed_documents([text])[0]
+
+
 from dotenv import load_dotenv
+
 class GeminiLLM(LLMBase):
     def __init__(
         self,
@@ -273,9 +415,9 @@ class GeminiLLM(LLMBase):
 if __name__ == "__main__":
     
     # Set the data
-    task_set = "yelp" # "goodreads" or "yelp"
+    task_set = "amazon" # "goodreads" or "yelp"
     try:
-        simulator = Simulator(data_dir="./tiny_data", device="gpu", cache=False)
+        simulator = Simulator(data_dir="./amazon_data_processed", device="gpu", cache=False)
         simulator.set_task_and_groundtruth(task_dir=f"./example/track1/{task_set}/tasks", groundtruth_dir=f"./example/track1/{task_set}/groundtruth")
 
         # Set the agent and LLM

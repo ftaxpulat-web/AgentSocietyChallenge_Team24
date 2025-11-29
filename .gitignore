@@ -19,3 +19,5 @@ db/
 data/
 .env
 results/
+amazon_data/
+amazon_data_processed/
