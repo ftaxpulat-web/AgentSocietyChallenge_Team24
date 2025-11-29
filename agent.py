@@ -413,30 +413,52 @@ class GeminiLLM(LLMBase):
         return self._embedding_model
 
 if __name__ == "__main__":
+    import os
     
-    # Set the data
-    task_set = "amazon" # "goodreads" or "yelp"
+    # 1. Get the absolute path to the folder containing this script (AgentSocietyChallenge_Team24/)
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+    # 2. Define absolute paths to your specific data locations
+    # Your processed data is in AgentSocietyChallenge_Team24/dataset
+    DATA_DIR = os.path.join(BASE_DIR, "dataset")
+    
+    # Your tasks are in AgentSocietyChallenge_Team24/example/track1/amazon/tasks
+    TASK_SET = "amazon" 
+    TASK_DIR = os.path.join(BASE_DIR, "example", "track1", TASK_SET, "tasks")
+    GT_DIR = os.path.join(BASE_DIR, "example", "track1", TASK_SET, "groundtruth")
+    
+    # Define where you want results to go
+    OUTPUT_DIR = os.path.join(BASE_DIR, "results")
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
     try:
-        simulator = Simulator(data_dir="./amazon_data_processed", device="gpu", cache=False)
-        simulator.set_task_and_groundtruth(task_dir=f"./example/track1/{task_set}/tasks", groundtruth_dir=f"./example/track1/{task_set}/groundtruth")
+        print(f"Loading data from: {DATA_DIR}")
+        # Initialize Simulator
+        # Note: device="auto" is safer than "gpu" for the first run to avoid CUDA errors
+        simulator = Simulator(data_dir=DATA_DIR, device="auto", cache=False)
+        
+        print(f"Loading tasks from: {TASK_DIR}")
+        simulator.set_task_and_groundtruth(task_dir=TASK_DIR, groundtruth_dir=GT_DIR)
 
         # Set the agent and LLM
+        # Make sure you have your GEMINI_API_KEY set in your environment variables!
         simulator.set_agent(MySimulationAgent)
-        simulator.set_llm(GeminiLLM(model="gemini-2.5-flash"))
-        print("Running simulation...")
-
-        # Run the simulation
-        # If you don't set the number of tasks, the simulator will run all tasks.
-        outputs = simulator.run_simulation(number_of_tasks=5, enable_threading=False, max_workers=1)
-        print("Simulation finished, evaluating...")
+        simulator.set_llm(GeminiLLM(model="gemini-1.5-flash")) # changed to 1.5-flash which is generally available
         
-        # Evaluate the agent
+        print("Running simulation...")
+        # Run a small batch (5 tasks) to test
+        outputs = simulator.run_simulation(number_of_tasks=5, enable_threading=False, max_workers=1)
+        
+        print("Simulation finished, evaluating...")
         evaluation_results = simulator.evaluate()       
-        with open(f'./results/evaluation_results_track1_{task_set}.json', 'w') as f:
+        
+        output_file = os.path.join(OUTPUT_DIR, f'evaluation_results_track1_{TASK_SET}.json')
+        with open(output_file, 'w') as f:
             json.dump(evaluation_results, f, indent=4)
 
-        # Get evaluation history
-        evaluation_history = simulator.get_evaluation_history()
-        print("Evaluation results:")
+        print(f"Success! Results saved to: {output_file}")
+        
     except Exception as e:
-        print("ERROR in main:", repr(e))
+        import traceback
+        print("ERROR in main execution:")
+        traceback.print_exc()
