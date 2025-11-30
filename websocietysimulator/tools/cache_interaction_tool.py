@@ -21,60 +21,75 @@ class CacheInteractionTool:
         self.env_dir = os.path.join(data_dir, "lmdb_cache")
         os.makedirs(self.env_dir, exist_ok=True)
 
-        self.user_env = lmdb.open(os.path.join(self.env_dir, "users"), map_size=2 * 1024 * 1024 * 1024)
-        self.item_env = lmdb.open(os.path.join(self.env_dir, "items"), map_size=2 * 1024 * 1024 * 1024)
-        self.review_env = lmdb.open(os.path.join(self.env_dir, "reviews"), map_size=8 * 1024 * 1024 * 1024)
+        # Updated to handle large Yelp/Amazon datasets
+        self.user_env = lmdb.open(os.path.join(self.env_dir, "users"), map_size=32 * 1024 * 1024 * 1024)
+        self.item_env = lmdb.open(os.path.join(self.env_dir, "items"), map_size=16 * 1024 * 1024 * 1024)
+        self.review_env = lmdb.open(os.path.join(self.env_dir, "reviews"), map_size=64 * 1024 * 1024 * 1024)
 
         # Initialize the database if empty
         self._initialize_db()
 
     def _initialize_db(self):
         """Initialize the LMDB databases with data if they are empty."""
-        # Initialize users
+        # Imports added here for safety so you don't have to scroll up
+        from collections import defaultdict 
+        import json
+        from tqdm import tqdm
+
+        # 1. Initialize users
+        # We check if the DB is empty first
         with self.user_env.begin(write=True) as txn:
             if not txn.stat()['entries']:
+                print("Step 1/4: Processing Users...")
                 with txn.cursor() as cursor:
-                    for user in tqdm(self._iter_file('user.json')):
-                        cursor.put(
-                            user['user_id'].encode(),
-                            json.dumps(user).encode()
-                        )
+                    # Added progress bar for Users
+                    for user in tqdm(self._iter_file('user.json'), desc="Users"):
+                        cursor.put(user['user_id'].encode(), json.dumps(user).encode())
+            else:
+                print("Users already cached. Skipping.")
 
-        # Initialize items
+        # 2. Initialize items
         with self.item_env.begin(write=True) as txn:
             if not txn.stat()['entries']:
+                print("Step 2/4: Processing Items...")
                 with txn.cursor() as cursor:
-                    for item in tqdm(self._iter_file('item.json')):
-                        cursor.put(
-                            item['item_id'].encode(),
-                            json.dumps(item).encode()
-                        )
+                    # Added progress bar for Items
+                    for item in tqdm(self._iter_file('item.json'), desc="Items"):
+                        cursor.put(item['item_id'].encode(), json.dumps(item).encode())
+            else:
+                print("Items already cached. Skipping.")
 
-        # Initialize reviews and their indices
+        # 3. Initialize reviews (OPTIMIZED: RAM Buffer)
+        # We buffer indices in RAM to avoid the expensive read-modify-write loop
+        item_review_index = defaultdict(list)
+        user_review_index = defaultdict(list)
+
         with self.review_env.begin(write=True) as txn:
             if not txn.stat()['entries']:
-                for review in tqdm(self._iter_file('review.json')):
-                    # Store the review
-                    txn.put(
-                        review['review_id'].encode(),
-                        json.dumps(review).encode()
-                    )
+                print("Step 3/4: Processing Reviews (Reading & Buffering)...")
+                
+                # Pass 1: Write Review Body and build memory index
+                # Added progress bar for Reviews
+                for review in tqdm(self._iter_file('review.json'), desc="Reading Reviews"):
+                    # Store the review body
+                    txn.put(review['review_id'].encode(), json.dumps(review).encode())
+                    
+                    # Store ID in memory buffer (Fast RAM operation)
+                    item_review_index[review['item_id']].append(review['review_id'])
+                    user_review_index[review['user_id']].append(review['review_id'])
 
-                    # Update item reviews index (store only review_ids)
-                    item_review_ids = json.loads(txn.get(f"item_{review['item_id']}".encode()) or '[]')
-                    item_review_ids.append(review['review_id'])
-                    txn.put(
-                        f"item_{review['item_id']}".encode(),
-                        json.dumps(item_review_ids).encode()
-                    )
-
-                    # Update user reviews index (store only review_ids)
-                    user_review_ids = json.loads(txn.get(f"user_{review['user_id']}".encode()) or '[]')
-                    user_review_ids.append(review['review_id'])
-                    txn.put(
-                        f"user_{review['user_id']}".encode(),
-                        json.dumps(user_review_ids).encode()
-                    )
+                # Pass 2: Dump indices to LMDB
+                print("Step 4/4: Saving Indices to Disk...")
+                
+                # Added progress bar for Item Index
+                for item_id, review_ids in tqdm(item_review_index.items(), desc="Indexing Items"):
+                    txn.put(f"item_{item_id}".encode(), json.dumps(review_ids).encode())
+                
+                # Added progress bar for User Index
+                for user_id, review_ids in tqdm(user_review_index.items(), desc="Indexing Users"):
+                    txn.put(f"user_{user_id}".encode(), json.dumps(review_ids).encode())
+            else:
+                print("Reviews already cached. Skipping.")
 
     def _iter_file(self, filename: str) -> Iterator[Dict]:
         """Iterate through file line by line."""
