@@ -409,7 +409,7 @@ class MyRecommendationAgent(RecommendationAgent):
         self,
         reviews_raw,
         platform: str,
-        max_reviews: int = 20
+        max_reviews: int = 10
     ) -> list[dict]:
         """
         Take all user reviews and keep the most informative ones,
@@ -513,12 +513,6 @@ class MyRecommendationAgent(RecommendationAgent):
                 user_text = str(user_info)
                 if len(user_text) > 2000:
                     user_text = user_text[:2000]
-                input_tokens = num_tokens_from_string(user_text)
-                if input_tokens > 12000:
-                    encoding = tiktoken.get_encoding("cl100k_base")
-                    user_text = encoding.decode(
-                        encoding.encode(user_text)[:12000]
-                    )
 
             elif 'item' in desc:
                 # Item info with platform-specific feature engineering
@@ -838,14 +832,7 @@ if __name__ == "__main__":
         with open(gt_path, "r", encoding="utf-8") as f:
             gt_obj = json.load(f)
 
-        # You MUST adapt this based on actual ground-truth schema.
-        # Common patterns:
-        #   - gt_item_id = gt_obj["groundtruth_item_id"]
-        #   - or gt_item_id = gt_obj["target"]
-        #   - or gt_item_id = gt_obj["answer"]
-        #
-        # For now, I'll assume it's something like:
-        gt_item_id = gt_obj.get("groundtruth_item_id") or gt_obj.get("target_item_id")
+        gt_item_id = gt_obj.get("ground truth")
 
         if gt_item_id is None:
             # If schema different, print once to help debug
@@ -856,10 +843,15 @@ if __name__ == "__main__":
 
     # Compute RMSE of rank (1 = best possible)
     squared_errors = []
-    for idx, (pred_list, gt_id) in enumerate(zip(agent_outputs, gt_items)):
+    for idx, (pred, gt_id) in enumerate(zip(agent_outputs, gt_items)):
+        # agent_outputs element can be either a dict with 'output' or already a list
+        if isinstance(pred, dict) and "output" in pred:
+            pred_list = pred["output"]
+        else:
+            pred_list = pred
+
         if not isinstance(pred_list, list):
-            # If something weird happens, skip
-            print(f"WARNING: prediction for scenario {idx} is not a list:", pred_list)
+            print(f"WARNING: prediction for scenario {idx} has unexpected type:", type(pred_list), pred_list)
             continue
 
         if gt_id in pred_list:
