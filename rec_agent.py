@@ -54,11 +54,113 @@ Task:{task_description}
             prompt = prompt.format(example=few_shot, task_description=task_description, task_type=task_type, feedback=feedback)
         return prompt
 
+class RecMemory:
+    """
+    Extremely compact, per-task memory for user preferences.
+
+    - Input: raw review text (possibly long, noisy).
+    - Output: exactly 5 sentences summarizing the user's preferences.
+    - Stores a single profile string for the current task.
+    """
+
+    def __init__(self, llm, max_sentences: int = 5):
+        self.llm = llm
+        self.max_sentences = max_sentences
+        self._user_profile: str = ""
+
+    def clear(self):
+        """Reset memory at the beginning of each new task."""
+        self._user_profile = ""
+
+    def __call__(self, review_text: str = "") -> str:
+        """
+        If review_text is provided and non-empty:
+          - Summarize reviews into a 5-sentence user profile and store it.
+        If review_text is empty:
+          - Return the stored profile (may be "" if not set yet).
+        """
+        if review_text:
+            self._user_profile = self._build_profile(review_text)
+        return self._user_profile
+
+    def _build_profile(self, review_text: str) -> str:
+        """
+        Use the LLM to summarize review_text into a compact profile,
+        then enforce exactly max_sentences sentences.
+        """
+        prompt = f"""
+You are building a concise user preference profile from their historical reviews.
+
+You will be given multiple reviews (possibly noisy). Your job:
+- Extract stable, high-level preferences (e.g., favorite categories, brands, styles, quality/price tradeoffs).
+- Ignore one-off outliers or random noise.
+- Focus on what this user tends to LIKE and DISLIKE across items.
+
+Write EXACTLY {self.max_sentences} sentences.
+- Each sentence should be complete and end with a period.
+- Do NOT number the sentences.
+- Do NOT include bullet points or headings.
+
+User review history:
+{review_text}
+"""
+
+        messages = [{"role": "user", "content": prompt}]
+        try:
+            raw = self.llm(
+                messages=messages,
+                temperature=0.2,
+                max_tokens=256,
+            )
+        except Exception as e:
+            print("RecMemory: error while summarizing reviews:", repr(e))
+            return ""
+
+        return self._to_exact_n_sentences(raw, self.max_sentences)
+
+    def _to_exact_n_sentences(self, text: str, n: int) -> str:
+        """
+        Best-effort post-processing to ensure exactly n sentences.
+        Splits on '.', '!' or '?' and recombines.
+        """
+        if not text:
+            return ""
+
+        # Rough split into sentences
+        import re as _re
+        parts = _re.split(r'([.!?])', text)
+        sentences = []
+        current = ""
+
+        for part in parts:
+            if not part:
+                continue
+            current += part
+            if part in ".!?":
+                s = current.strip()
+                if s:
+                    sentences.append(s)
+                current = ""
+        tail = current.strip()
+        if tail:
+            sentences.append(tail if tail.endswith(('.', '!', '?')) else tail + ".")
+
+        if not sentences:
+            return ""
+        if len(sentences) >= n:
+            return " ".join(sentences[:n])
+        last = sentences[-1]
+        while len(sentences) < n:
+            sentences.append(last)
+        return " ".join(sentences)
+
+
 class RecReasoning(ReasoningBase):
     """Inherits from ReasoningBase"""
 
-    def __init__(self, profile_type_prompt, llm):
-        super().__init__(profile_type_prompt=profile_type_prompt, memory=None, llm=llm)
+    def __init__(self, profile_type_prompt, llm, memory: RecMemory):
+        super().__init__(profile_type_prompt=profile_type_prompt, memory=memory, llm=llm)
+        self.memory = memory
 
     def __call__(self, task_description: str):
         """
@@ -66,25 +168,40 @@ class RecReasoning(ReasoningBase):
           - candidate_list
           - user history
           - item info
-        Here we only add concise instructions + format rules.
+        We now ALSO include the 5-sentence user profile from memory,
+        and ask the model to output per-item scores in JSON.
         """
+        user_profile = ""
+        if self.memory is not None:  # retrieve the stored profile
+            user_profile = self.memory() or ""
+
         prompt = f"""
 You are a recommendation ranking model.
 
+User preference summary (5 sentences):
+{user_profile}
+
 Task:
-- Rank the given candidate item IDs for this user.
+- For this user, assign a relevance score from 0.0 to 10.0 to EACH candidate item ID.
 
 Constraints:
-- Use ONLY the item IDs in the candidate list provided.
+- Use ONLY the item IDs in the provided candidate list.
 - Include ALL of those IDs exactly once.
 - Do NOT invent new IDs.
-- Do NOT return empty strings.
-- Output ONLY a Python list of strings, no explanation.
+- Do NOT omit any IDs.
+- Do NOT include any explanation or commentary.
 
-Format:
-['item_id1', 'item_id2', 'item_id3', ...]
+Output format (VERY IMPORTANT):
+- Output ONLY valid JSON, no backticks or extra text.
+- The JSON MUST be an array of objects with "item_id" and "score" fields.
+- Example:
+[
+  {{"item_id": "ITEM_ID_1", "score": 8.5}},
+  {{"item_id": "ITEM_ID_2", "score": 6.2}},
+  {{"item_id": "ITEM_ID_3", "score": 2.0}}
+]
 
-Context:
+Context for scoring:
 {task_description}
 """.strip()
 
@@ -94,8 +211,8 @@ Context:
             temperature=0.0,
             max_tokens=4096,
         )
-
         return reasoning_result
+
 
 
 
@@ -111,11 +228,12 @@ class MyRecommendationAgent(RecommendationAgent):
 
     def __init__(self, llm: LLMBase):
         super().__init__(llm=llm)
+        self.memory = RecMemory(llm=self.llm, max_sentences=5)
         self.planning = RecPlanning(llm=self.llm)
-        self.reasoning = RecReasoning(profile_type_prompt='', llm=self.llm)
+        self.reasoning = RecReasoning(profile_type_prompt='', llm=self.llm, memory=self.memory)
         self.platform: str = "unknown"  # "yelp" | "amazon" | "goodreads" | "unknown"
 
-    # ---------- Helpers: platform & feature engineering ----------
+    # Helpers: platform & feature engineering 
 
     def _detect_platform_from_item(self, item: dict) -> str:
         """
@@ -128,7 +246,7 @@ class MyRecommendationAgent(RecommendationAgent):
         if not isinstance(item, dict):
             return "unknown"
 
-        # Goodreads-style metadata
+        # Goodreads
         if (
             "title_without_series" in item
             or "similar_books" in item
@@ -136,7 +254,7 @@ class MyRecommendationAgent(RecommendationAgent):
         ):
             return "goodreads"
 
-        # Amazon-style metadata
+        # Amazon
         if (
             "description" in item
             or "average_rating" in item
@@ -144,7 +262,7 @@ class MyRecommendationAgent(RecommendationAgent):
         ):
             return "amazon"
 
-        # Yelp-style (default)
+        # Yelp
         if (
             "name" in item
             or "stars" in item
@@ -165,7 +283,7 @@ class MyRecommendationAgent(RecommendationAgent):
         base_keys = ["item_id"]
 
         if platform == "amazon":
-            # Product-centric features
+            # Product features
             extra_keys = [
                 "title",              # product name
                 "average_rating",
@@ -176,7 +294,7 @@ class MyRecommendationAgent(RecommendationAgent):
                 "price",
             ]
         elif platform == "yelp":
-            # Business-centric features
+            # Business features
             extra_keys = [
                 "name",
                 "stars",
@@ -186,7 +304,7 @@ class MyRecommendationAgent(RecommendationAgent):
                 "state",
             ]
         elif platform == "goodreads":
-            # Book-centric features
+            # Book features
             extra_keys = [
                 "title_without_series",
                 "authors",
@@ -197,7 +315,7 @@ class MyRecommendationAgent(RecommendationAgent):
                 "genres",
             ]
         else:
-            # Fallback: keep a safe small set
+            # Default
             extra_keys = [
                 "name",
                 "title",
@@ -224,10 +342,8 @@ class MyRecommendationAgent(RecommendationAgent):
             return [r for r in reviews_raw if isinstance(r, dict)]
 
         if isinstance(reviews_raw, dict):
-            # Could be {review_id: review_obj}
             return [v for v in reviews_raw.values() if isinstance(v, dict)]
 
-        # Fallback: nothing structured
         return []
 
     def _score_review(self, r: dict, platform: str) -> float:
@@ -242,38 +358,37 @@ class MyRecommendationAgent(RecommendationAgent):
 
         score = 0.0
 
-        # Shared helpfulness-like signals
+        # POsitive signals
         for key in ["useful", "funny", "cool", "votes", "vote",
                     "helpful", "helpful_votes", "n_votes"]:
             val = r.get(key, 0) or 0
             if isinstance(val, (int, float)):
                 score += float(val)
 
-        # Rating often indicates strength
+        # Rating indicates strength
         for key in ["stars", "rating", "review_rating"]:
             val = r.get(key, None)
             if isinstance(val, (int, float)):
                 score += 0.1 * float(val)
 
         if platform == "amazon":
-            # Verified purchase bonus
+            # Verified bonus
             if r.get("verified_purchase") or r.get("verified", False):
                 score += 3.0
 
         if platform == "goodreads":
-            # Reading status / shelf info
+            # Read reviews more important
             if r.get("read_status") in ["read", "currently-reading"]:
                 score += 1.0
-            # Comments / interactions
+            # Comments / interactions 
             for key in ["n_comments", "comments_count"]:
                 val = r.get(key, 0) or 0
                 if isinstance(val, (int, float)):
                     score += 0.5 * float(val)
 
-        # Timestamp recency bonus (rough, if we can parse numeric)
+        # Timestamp recency bonus score
         for key in ["date", "review_date", "timestamp", "time"]:
             val = r.get(key, None)
-            # If it is a number-like timestamp, give small bonus
             if isinstance(val, (int, float)):
                 score += 0.000000001 * float(val)
 
@@ -331,7 +446,6 @@ class MyRecommendationAgent(RecommendationAgent):
             if platform == "amazon" and r.get("verified_purchase"):
                 meta_parts.append("verified_purchase=True")
             if platform == "yelp":
-                # summarize useful/funny/cool if available
                 for k in ["useful", "funny", "cool"]:
                     if k in r:
                         meta_parts.append(f"{k}={r[k]}")
@@ -350,7 +464,7 @@ class MyRecommendationAgent(RecommendationAgent):
 
         return "\n".join(lines)
 
-    # ---------- Main workflow ----------
+    # Main workflow 
 
     def workflow(self):
         """
@@ -362,9 +476,9 @@ class MyRecommendationAgent(RecommendationAgent):
         Returns:
             list: Sorted list of item IDs
         """
+        if hasattr(self, "memory") and self.memory is not None:
+            self.memory.clear()
 
-        # You *could* call self.planning(...) here; for now we keep a
-        # fixed plan consistent with the paper description.
         plan = [
             {'description': 'First I need to find user information'},
             {'description': 'Next, I need to find item information'},
@@ -381,7 +495,7 @@ class MyRecommendationAgent(RecommendationAgent):
             desc = sub_task.get('description', '').lower()
 
             if 'user' in desc:
-                # Raw user info (we keep as text, like the baseline agent)
+                # Raw user info 
                 user_info = self.interaction_tool.get_user(
                     user_id=self.task['user_id']
                 )
@@ -398,24 +512,23 @@ class MyRecommendationAgent(RecommendationAgent):
                 for item_id in self.task['candidate_list']:
                     item = self.interaction_tool.get_item(item_id=item_id)
 
-                    # Handle missing items gracefully
                     if item is None:
                         print(f"[WARN] get_item returned None for item_id={item_id}, skipping.")
                         continue
 
-                    # Detect platform once from the first non-null item
+                    # Detect platform from first non-null item
                     if platform == "unknown":
                         platform = self._detect_platform_from_item(item)
 
                     filtered_item = self._extract_item_features(
                         item, platform=platform
                     )
-                    # Always keep item_id in features so the LLM can map back
+
                     filtered_item.setdefault("item_id", item_id)
                     item_list.append(filtered_item)
 
             elif 'review' in desc:
-                # Fetch all user reviews, then filter them like DummyAgent
+                # Fetch all user reviews, then filter 
                 raw_reviews = self.interaction_tool.get_reviews(
                     user_id=self.task['user_id']
                 )
@@ -429,7 +542,6 @@ class MyRecommendationAgent(RecommendationAgent):
                     platform=platform
                 )
 
-                # Safety: if everything failed, fallback to plain string
                 if not history_review_text:
                     fallback = str(raw_reviews)
                     input_tokens = num_tokens_from_string(fallback)
@@ -440,17 +552,15 @@ class MyRecommendationAgent(RecommendationAgent):
                         )
                     history_review_text = fallback
 
+                if history_review_text and self.memory is not None:
+                    self.memory(history_review_text)
+
+
             else:
-                # Unknown sub-task; ignore for now
                 pass
 
-        # Persist platform for potential later use
-        self.platform = platform
+        # Final prompt: emphasize platform, user history, item features
 
-        # Final prompt: emphasize (1) platform, (2) user history, (3) item features
-        # Keep the two key anchor phrases so DummyLLM still works:
-        #  - "Now you need to rank the following 20 items: [...]"
-        #  - "The information of the above 20 candidate items is as follows:"
         candidate_list = self.task['candidate_list']
         platform_str = {
             "yelp": "Yelp (local business reviews)",
@@ -487,51 +597,69 @@ CANDIDATE_ITEMS_INFO:
 
         candidate_list = list(self.task.get("candidate_list", []))
 
+        # --- New: parse JSON scores and sort in Python ---
         try:
-            # Extract the first Python list-like substring from the LLM output
+            import json
+
+            # Try to find a JSON array in the output (in case the model adds stray text)
             match = re.search(r"\[.*\]", result, re.DOTALL)
             if not match:
-                print("No list found in LLM output. Falling back to candidate_list.")
+                print("No JSON array found in LLM output. Falling back to candidate_list.")
                 print("Raw LLM output:", result)
                 return candidate_list
 
-            result_str = match.group()
+            json_str = match.group()
+            parsed = json.loads(json_str)
 
-            # Safer than eval
-            import ast
-            parsed = ast.literal_eval(result_str)
-
-            # Normalize to list of strings
             if not isinstance(parsed, list):
-                print("Parsed output is not a list. Falling back to candidate_list.")
+                print("Parsed JSON is not a list. Falling back to candidate_list.")
                 print("Parsed:", parsed)
                 return candidate_list
 
-            normalized = [str(x) for x in parsed]
-            print("Raw LLM result:", result)
-            print("Result_str:", result_str)
-            print("Parsed:", parsed)
-            print("Candidate_list:", candidate_list)
-            print("Normalized:", normalized)
+            # Normalize and filter: keep only valid items with an id in candidate_list
+            scored_items = []
+            for obj in parsed:
+                if not isinstance(obj, dict):
+                    continue
+                item_id = str(obj.get("item_id", "")).strip()
+                if item_id not in candidate_list:
+                    continue
+                score_val = obj.get("score", 0.0)
+                try:
+                    score = float(score_val)
+                except (TypeError, ValueError):
+                    score = 0.0
+                scored_items.append((item_id, score))
 
-            # Filter: keep only IDs that are in candidate_list
-            filtered = [x for x in normalized if x in candidate_list]
-
-            # If nothing left, or clearly junk like [''], fall back
-            if not filtered or filtered == ['']:
-                print("Filtered result invalid or empty. Falling back to candidate_list.")
+            if not scored_items:
+                print("No valid (item_id, score) pairs after filtering. Falling back to candidate_list.")
                 print("Raw LLM output:", result)
-                print("Parsed:", normalized)
+                print("Parsed JSON:", parsed)
                 return candidate_list
 
-            print("Processed Output:", filtered)
-            return filtered
+            # Sort by score descending
+            scored_items.sort(key=lambda x: x[1], reverse=True)
+
+            # Extract ranking
+            ranked_ids = [item_id for (item_id, _) in scored_items]
+
+            # For safety: ensure all candidate IDs are present (append missing in original order)
+            missing = [cid for cid in candidate_list if cid not in ranked_ids]
+            ranked_ids.extend(missing)
+
+            print("Raw LLM result:", result)
+            print("JSON_str:", json_str)
+            print("Parsed JSON:", parsed)
+            print("Scored_items:", scored_items)
+            print("Final ranked_ids:", ranked_ids)
+
+            return ranked_ids
 
         except Exception as e:
-            print("Format error when parsing LLM output:", repr(e))
+            print("Format error when parsing JSON scores:", repr(e))
             print("Raw LLM output:", result)
-            # As a last resort, just return the original candidate order
             return candidate_list
+
 
 
 
@@ -551,66 +679,6 @@ class DummyEmbeddingModel:
 
     def embed_query(self, text: str) -> List[float]:
         return [0.0]
-class DummyLLM(LLMBase):
-    """
-    Simple dummy LLM for the recommendation agent.
-    It ignores true semantics and just returns a ranked list
-    of the candidate items extracted from the prompt.
-    """
-
-    def __init__(self, model: str = "dummy-rec"):
-        super().__init__(model=model)
-        self._embedding_model = DummyEmbeddingModel()
-
-    def __call__(
-        self,
-        messages: List[Dict[str, str]],
-        model: Optional[str] = None,
-        temperature: float = 0.0,
-        max_tokens: int = 500,
-        stop_strs: Optional[List[str]] = None,
-        n: int = 1,
-    ) -> str:
-        # Take the last user message content (the task_description)
-        if not messages:
-            return "['']"
-
-        last_msg = messages[-1].get("content", "")
-        if not isinstance(last_msg, str):
-            return "['']"
-
-        # Try to extract the candidate_list from the prompt.
-        # The prompt contains a line like:
-        # "Now you need to rank the following 20 items: [...] according to their match degree..."
-        candidate_list = None
-        try:
-            # Only look at the part before the "The information of the above 20 candidate items" section
-            before_info = last_msg.split(
-                "The information of the above 20 candidate items", 1
-            )[0]
-            start = before_info.find("[")
-            end = before_info.find("]", start)
-            if start != -1 and end != -1:
-                list_str = before_info[start : end + 1]
-                candidate_list = ast.literal_eval(list_str)
-        except Exception as e:
-            print("DummyLLM: error parsing candidate_list:", e)
-            candidate_list = None
-
-        if not candidate_list or not isinstance(candidate_list, list):
-            # Fallback: return a trivial list so the agent doesn't crash
-            return "['']"
-
-        # Dummy ranking: reverse the list (you could also just keep it as-is)
-        ranked = list(reversed(candidate_list))
-
-        # The agent expects something like: "['item id1', 'item id2', ...]"
-        return repr(ranked)
-
-    def get_embedding_model(self):
-        # Return a stub embedding model instead of None,
-        # so evaluation/memory code won't crash.
-        return self._embedding_model
 
 from typing import List, Dict, Any, Optional
 from google import genai
