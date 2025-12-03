@@ -347,7 +347,7 @@ class GeminiLLM(LLMBase):
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-2.5-pro",   # or "gemini-2.5-flash"
+        model: str = "gemini-2.5-flash",   # or "gemini-2.5-flash"
         embedding_model: str = "text-embedding-004",
     ):
         super().__init__(model=model)
