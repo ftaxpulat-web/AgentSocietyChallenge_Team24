@@ -811,7 +811,7 @@ class GeminiLLM(LLMBase):
 if __name__ == "__main__":
     task_set = "amazon"  # "goodreads" or "yelp"
     # Initialize Simulator
-    simulator = Simulator(data_dir="./amazon_data_processed", device="auto", cache=False)
+    simulator = Simulator(data_dir="./tiny_data", device="auto", cache=False)
 
     # Load scenarios
     simulator.set_task_and_groundtruth(
@@ -828,7 +828,7 @@ if __name__ == "__main__":
     # --- STEP 1: test run_simulation only ---
     print("About to run simulation...")
     agent_outputs = simulator.run_simulation(
-        number_of_tasks=25, enable_threading=False, max_workers=1
+        number_of_tasks=3, enable_threading=False, max_workers=1
     )
     print("Simulation finished. ") # Sample output for first task:", agent_outputs[:1])
 
@@ -842,7 +842,16 @@ if __name__ == "__main__":
     gt_items = []  # ground-truth item_id per scenario
 
     # Assuming groundtruth is a bunch of jsonlines or jsons in groundtruth_dir
-    gt_files = sorted(glob.glob(f"./example/track2/{task_set}/groundtruth/*.json*"))
+    def extract_gt_index(path: str) -> int:
+        """Extract numeric index from filenames like ground_truth3.json."""
+        base = os.path.basename(path)          # e.g. "ground_truth10.json"
+        m = re.search(r'(\d+)', base)          # find "10"
+        return int(m.group(1)) if m else 0     # defaul t 0 if no match
+
+    gt_files = sorted(
+        glob.glob(f"./example/track2/{task_set}/groundtruth/*.json*"),
+        key=extract_gt_index
+    )
 
     for gt_path in gt_files[:len(agent_outputs)]:
         with open(gt_path, "r", encoding="utf-8") as f:
