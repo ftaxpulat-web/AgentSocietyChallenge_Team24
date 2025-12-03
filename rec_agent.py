@@ -109,7 +109,7 @@ User review history:
         try:
             raw = self.llm(
                 messages=messages,
-                temperature=0.2,
+                temperature=0.1,
                 max_tokens=256,
             )
         except Exception as e:
@@ -184,6 +184,14 @@ User preference summary (5 sentences):
 Task:
 - For this user, assign a relevance score from 0.0 to 10.0 to EACH candidate item ID.
 
+Scoring rules (IMPORTANT):
+- 10.0 = extremely relevant and strongly preferred.
+- 0.0 = extremely irrelevant for this user.
+- Most items should be somewhere in between.
+- Do NOT give the same score to all items.
+- Items that are more relevant MUST have higher scores than less relevant items.
+- Try to use the full range [0.0, 10.0] across the candidate list.
+
 Constraints:
 - Use ONLY the item IDs in the provided candidate list.
 - Include ALL of those IDs exactly once.
@@ -196,8 +204,8 @@ Output format (VERY IMPORTANT):
 - The JSON MUST be an array of objects with "item_id" and "score" fields.
 - Example:
 [
-  {{"item_id": "ITEM_ID_1", "score": 8.5}},
-  {{"item_id": "ITEM_ID_2", "score": 6.2}},
+  {{"item_id": "ITEM_ID_1", "score": 9.5}},
+  {{"item_id": "ITEM_ID_2", "score": 6.0}},
   {{"item_id": "ITEM_ID_3", "score": 2.0}}
 ]
 
@@ -205,11 +213,12 @@ Context for scoring:
 {task_description}
 """.strip()
 
+
         messages = [{"role": "user", "content": prompt}]
         reasoning_result = self.llm(
             messages=messages,
-            temperature=0.0,
-            max_tokens=4096,
+            temperature=0.1,
+            max_tokens=8192,
         )
         return reasoning_result
 
@@ -328,6 +337,8 @@ class MyRecommendationAgent(RecommendationAgent):
 
         keys_to_keep = base_keys + extra_keys
         filtered = {k: item[k] for k in keys_to_keep if k in item}
+        if "description" in filtered:
+            filtered["description"] = str(filtered["description"])[:500]
         return filtered
 
     def _normalize_review_list(self, reviews_raw):
@@ -500,6 +511,8 @@ class MyRecommendationAgent(RecommendationAgent):
                     user_id=self.task['user_id']
                 )
                 user_text = str(user_info)
+                if len(user_text) > 2000:
+                    user_text = user_text[:2000]
                 input_tokens = num_tokens_from_string(user_text)
                 if input_tokens > 12000:
                     encoding = tiktoken.get_encoding("cl100k_base")
@@ -742,8 +755,8 @@ class GeminiLLM(LLMBase):
         self,
         messages: List[Dict[str, str]],
         model: Optional[str] = None,
-        temperature: float = 0.0,
-        max_tokens: int = 4096,
+        temperature: float = 0.1,
+        max_tokens: int = 8192,
         stop_strs: Optional[List[str]] = None,
         n: int = 1,
     ) -> str:
@@ -812,9 +825,68 @@ if __name__ == "__main__":
     # --- STEP 2: test evaluate separately ---
     print("About to evaluate...")
     evaluation_results = simulator.evaluate()
+    import math
+    import glob
 
-    # Save results
+    # Collect ground-truth labels in order
+    gt_items = []  # ground-truth item_id per scenario
+
+    # Assuming groundtruth is a bunch of jsonlines or jsons in groundtruth_dir
+    gt_files = sorted(glob.glob(f"./example/track2/{task_set}/groundtruth/*.json*"))
+
+    for gt_path in gt_files[:len(agent_outputs)]:
+        with open(gt_path, "r", encoding="utf-8") as f:
+            gt_obj = json.load(f)
+
+        # You MUST adapt this based on actual ground-truth schema.
+        # Common patterns:
+        #   - gt_item_id = gt_obj["groundtruth_item_id"]
+        #   - or gt_item_id = gt_obj["target"]
+        #   - or gt_item_id = gt_obj["answer"]
+        #
+        # For now, I'll assume it's something like:
+        gt_item_id = gt_obj.get("groundtruth_item_id") or gt_obj.get("target_item_id")
+
+        if gt_item_id is None:
+            # If schema different, print once to help debug
+            print("WARNING: groundtruth schema unknown for", gt_path, "object:", gt_obj)
+            gt_item_id = ""  # fallback; will be treated as "missing" below
+
+        gt_items.append(gt_item_id)
+
+    # Compute RMSE of rank (1 = best possible)
+    squared_errors = []
+    for idx, (pred_list, gt_id) in enumerate(zip(agent_outputs, gt_items)):
+        if not isinstance(pred_list, list):
+            # If something weird happens, skip
+            print(f"WARNING: prediction for scenario {idx} is not a list:", pred_list)
+            continue
+
+        if gt_id in pred_list:
+            # rank index (1-based)
+            rank = pred_list.index(gt_id) + 1
+        else:
+            # Penalize missing item with "worst" rank (len+1)
+            rank = len(pred_list) + 1
+
+        error = (rank - 1) ** 2  # target rank = 1
+        squared_errors.append(error)
+
+    if squared_errors:
+        rmse = math.sqrt(sum(squared_errors) / len(squared_errors))
+    else:
+        rmse = None
+
+    # Attach RMSE into evaluation_results so it appears in the JSON
+    if "metrics" not in evaluation_results:
+        evaluation_results["metrics"] = {}
+    evaluation_results["metrics"]["rmse_rank_1based"] = rmse
+    print("Custom RMSE (rank vs 1):", rmse)
+
+    # --- STEP 4: save results with RMSE ---
     import os
     os.makedirs("./results", exist_ok=True)
     with open(f'./results/evaluation_results_track2_{task_set}.json', 'w') as f:
         json.dump(evaluation_results, f, indent=4)
+
+    print("Done. Saved evaluation_results with RMSE.")
