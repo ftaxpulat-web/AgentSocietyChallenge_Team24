@@ -1,21 +1,22 @@
+# team24_agent/config.py
+
 from dataclasses import dataclass, asdict, field
-from typing import Optional
+import os
 
 @dataclass
 class ExperimentConfig:
     exp_name: str = "default"
-    memory_type: str = "none"  # "none", "dilu", "global_rag"
-    use_reflection: bool = False
+
+    # module choices (must match registry keys)
+    memory_type: str = "none"      # "none", "dilu", "generative", "tp", "voyager"
+    reasoning_type: str = "io"     # "io", "cot", "cotsc", "tot", "dilu", "self_refine", "step_back"
+    planning_type: str = "io"      # "io", "deps", "td", "voyager", "openagi", "hugginggpt"
+
     task_count: int = 10
     model_name: str = "gemini-2.5-flash"
-    
-    # Paths
-    base_dir: str = field(default_factory=lambda: "path/to/root")
+
+    base_dir: str = field(default_factory=lambda: os.path.dirname(__file__))
     data_dir: str = "dataset"
-    task_set: str = "amazon"
-    
-    # RAG Settings
-    global_db_path: str = "global_chroma_db"
-    
+
     def to_dict(self):
         return asdict(self)

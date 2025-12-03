@@ -6,6 +6,7 @@ import uuid
 from typing import List, Dict
 from langchain_chroma import Chroma
 from langchain.docstore.document import Document
+from websocietysimulator.agent.modules.memory_modules import MemoryBase
 
 class GlobalReviewRAG:
     """
@@ -40,71 +41,73 @@ class GlobalReviewRAG:
         
         return [doc.metadata for doc in results]
 
-
-class ReviewRAG:
+class HybridRAGMemory(MemoryBase):
     """
-    Episodic (Temporary) Memory for a single simulation task.
-    Creates a tiny Vector DB on the fly, uses it, and deletes it.
+    Adapter that combines:
+    1. GlobalRAG: To find the User's past taste (Long-term memory).
+    2. Live Tool: To find the Item's current reputation (Short-term context).
     """
-    def __init__(self, embedding_model):
-        self.embedding_model = embedding_model
-        # Unique path for this specific task to avoid collision
-        self.db_path = os.path.join('./db_temp', str(uuid.uuid4()))
-        self.vector_store = None
+    def __init__(self, llm, db_path="./global_chroma_db", interaction_tool=None):
+        # Initialize parent with dummy type since we override logic
+        super().__init__(memory_type='hybrid_rag', llm=llm)
+        
+        # 1. Load the Pre-computed User History DB
+        self.rag_engine = GlobalReviewRAG(llm.get_embedding_model(), db_path)
+        
+        # 2. Tool Access (injected later via set_tool)
+        self.interaction_tool = interaction_tool 
 
-    def index_user_history(self, user_reviews: List[Dict], interaction_tool):
-        """
-        Enrich and index user reviews.
-        """
-        docs = []
-        for r in user_reviews:
-            # OPTIMIZATION: We fetch the item metadata for this review
-            past_item = interaction_tool.get_item(item_id=r['item_id'])
-            if not past_item: continue
+    def set_tool(self, tool):
+        self.interaction_tool = tool
 
-            # Construct a rich semantic string
-            # "Category: Electronics. Name: Sony Headphones. Review: Great bass..."
-            content = f"Category: {past_item.get('categories', 'Unknown')}. Name: {past_item.get('name', 'Unknown')}. Review: {r.get('text', '')}"
+    def retriveMemory(self, query_scenario: str) -> str:
+        """
+        Expects query_scenario in format: "USER_ID|ITEM_ID|QUERY_TEXT"
+        Returns a formatted string containing both context sets.
+        """
+        try:
+            if "|" not in query_scenario: return ""
+            user_id, item_id, query_text = query_scenario.split("|", 2)
             
-            docs.append(Document(
-                page_content=content,
-                metadata={
-                    "stars": r.get('stars', 0),
-                    "text": r.get('text', ''),
-                    "item_name": past_item.get('name', '')
-                }
-            ))
+            # --- PART A: User's Relevant History (From Global DB) ---
+            # "How did I rate similar items in the past?"
+            user_history_text = "No relevant history found."
+            past_reviews = self.rag_engine.retrieve(user_id, query_text, k=3)
+            
+            if past_reviews:
+                blocks = []
+                for r in past_reviews:
+                    # r is metadata dict: {'item_desc':..., 'stars':..., 'text':...}
+                    blocks.append(f"- [{r.get('item_desc','Product')}] ({r.get('stars')} stars): \"{r.get('text','')[:200]}...\"")
+                user_history_text = "\n".join(blocks)
 
-        if docs:
-            self.vector_store = Chroma.from_documents(
-                documents=docs,
-                embedding=self.embedding_model,
-                persist_directory=self.db_path
-            )
+            # --- PART B: Item's Community Consensus (From Live Tool) ---
+            # "What are other people saying about THIS item?"
+            item_consensus_text = "No community reviews available."
+            if self.interaction_tool:
+                # Fetch recent reviews for the target item
+                item_reviews = self.interaction_tool.get_reviews(item_id=item_id)
+                # Take top 3 most useful/recent
+                if item_reviews:
+                    blocks = []
+                    for r in item_reviews[:3]:
+                        blocks.append(f"- [Community Member] ({r.get('stars')} stars): \"{r.get('text','')[:200]}...\"")
+                    item_consensus_text = "\n".join(blocks)
 
-    def retrieve(self, target_item: Dict, k: int = 5) -> List[Dict]:
-        """
-        Retrieve reviews similar to the target item.
-        """
-        if not self.vector_store:
-            return []
+            # --- FORMAT OUTPUT ---
+            return f"""
+                [User's Past Reviews on Similar Items]
+                (Use this to gauge the user's specific taste and rating strictness)
+                {user_history_text}
 
-        # Query using the Target Item's metadata
-        query = f"Category: {target_item.get('categories', 'Unknown')}. Name: {target_item.get('name', 'Unknown')}"
-        
-        results = self.vector_store.similarity_search(query, k=k)
-        
-        # Unpack the metadata back into a list of dicts
-        retrieved_reviews = []
-        for doc in results:
-            retrieved_reviews.append({
-                "text": doc.metadata['text'],
-                "stars": doc.metadata['stars'],
-                "item_name": doc.metadata['item_name']
-            })
-        return retrieved_reviews
+                [Community Reviews of Target Item]
+                (Use this to identify the item's actual pros/cons)
+                {item_consensus_text}
+            """
+        except Exception as e:
+            logging.error(f"Hybrid Memory Error: {e}")
+            return ""
 
-    def cleanup(self):
-        """Delete the temporary database."""
-        if os.path.exists(self.db_path):
-            shutil.rmtree(self.db_path)
+    def addMemory(self, current_situation: str):
+        # We use pre-computed DB, so we don't add memory during inference
+        pass

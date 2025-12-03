@@ -1,186 +1,179 @@
 import logging
-import json 
-from typing import Dict, Any, Optional
+import re
+from typing import Any, Dict
 
 from websocietysimulator.agent import SimulationAgent
 from websocietysimulator.llm import LLMBase
 
-from .prompts import (
-    PERSONA_PROMPT, 
-    PLANNING_PROMPT, 
-    REFLECTION_PROMPT, 
-    FINAL_WRITING_PROMPT
+# Import standard modules
+from websocietysimulator.agent.modules.reasoning_modules import (
+    ReasoningIO, ReasoningCOT, ReasoningCOTSC, ReasoningTOT,
+    ReasoningDILU, ReasoningSelfRefine, ReasoningStepBack,
 )
-from .memory import GlobalReviewRAG, ReviewRAG 
+from websocietysimulator.agent.modules.memory_modules import (
+    MemoryDILU, MemoryGenerative, MemoryTP, MemoryVoyager
+)
+
+from team24_agent.memory import HybridRAGMemory
+
 from .config import ExperimentConfig
+from .prompts import TASK_DESCRIPTION
 
-logger = logging.getLogger("team24_agent")
+logger = logging.getLogger("team24_modular_agent")
 
-class MySimulationAgent(SimulationAgent):
-    """
-    Refactored Agent supporting:
-    1. Hybrid RAG (Recent History + Relevant History)
-    2. Global Pre-computed Knowledge Base
-    3. Reflection (Self-Correction)
-    """
+REASONING_REGISTRY = {
+    "io": ReasoningIO,
+    "cot": ReasoningCOT,
+    "cotsc": ReasoningCOTSC,
+    "tot": ReasoningTOT,
+    "dilu": ReasoningDILU,
+    "self_refine": ReasoningSelfRefine,
+    "step_back": ReasoningStepBack,
+}
 
-    def __init__(self, llm: LLMBase, config: ExperimentConfig = None):
+MEMORY_REGISTRY = {
+    "none": None,
+    "dilu": MemoryDILU,
+    "generative": MemoryGenerative,
+    "tp": MemoryTP,
+    "voyager": MemoryVoyager,
+    "hybrid_rag": HybridRAGMemory,
+}
+
+class Team24Agent(SimulationAgent):
+    def __init__(self, llm: LLMBase, config: ExperimentConfig):
         super().__init__(llm=llm)
-        self.config = config or ExperimentConfig()
+        self.config = config
+
+        # 1) Memory Initialization
+        memory_cls = MEMORY_REGISTRY.get(config.memory_type)
+        self.memory = memory_cls(llm=self.llm) if memory_cls is not None else None
+
+        # 2) Reasoning Initialization
+        reasoning_cls = REASONING_REGISTRY.get(config.reasoning_type, ReasoningIO)
+        self.reasoning = reasoning_cls(
+            profile_type_prompt="",   
+            memory=self.memory,
+            llm=self.llm,
+        )
+
+    # --- HELPER: Clean User Profile ---
+    def _format_user_profile(self, user_data: dict) -> str:
+        if not user_data: return "Unknown User"
+        name = user_data.get('name', 'Anonymous')
+        rev_count = user_data.get('review_count', 0)
+        avg_stars = user_data.get('average_stars', 'N/A')
+        since = str(user_data.get('yelping_since', 'Unknown')).split()[0]
+        elite = user_data.get('elite')
+        elite_str = f"| Elite Status: {elite}" if elite and elite != 'None' else ""
+        return f"Name: {name}\nStats: {rev_count} reviews, Avg Rating {avg_stars}, Member since {since} {elite_str}"
+
+    # --- HELPER: Clean Item Profile ---
+    def _format_item_profile(self, item_data: dict) -> str:
+        """
+        Flattens Yelp 'attributes' and includes Community Rating.
+        """
+        if not item_data: return "Unknown Business"
+
+        name = item_data.get('name', 'Unknown')
+        categories = item_data.get('categories', '')
         
-        # Initialize Memory
-        self.rag_engine = None
-        if self.config.memory_type == "global_rag":
-            logger.info(f"Connecting to Global Vector DB at {self.config.global_db_path}")
-            self.rag_engine = GlobalReviewRAG(
-                embedding_model=self.llm.get_embedding_model(),
-                db_path=self.config.global_db_path
+        # --- NEW: Grab the Community Rating ---
+        community_rating = item_data.get('stars', 'N/A')
+        
+        # Unpack Attributes
+        attrs = item_data.get('attributes', {})
+        details = []
+        
+        if attrs and isinstance(attrs, dict):
+            for k, v in attrs.items():
+                val_str = str(v).replace("u'", "").replace("'", "").replace("{", "").replace("}", "")
+                details.append(f"- {k}: {val_str}")
+
+        # Limit to top 10 attributes
+        details_block = "\n".join(details[:10]) 
+
+        # Return string with Community Rating included
+        return f"""
+            Business: {name}
+            Community Rating: {community_rating} / 5.0
+            Categories: {categories}
+            Attributes:
+            {details_block}
+        """
+
+    def workflow(self) -> Dict[str, Any]:
+        try:
+            user_id = self.task["user_id"]
+            item_id = self.task["item_id"]
+
+            # --- Fetch & Format Data ---
+            user_obj = self.interaction_tool.get_user(user_id=user_id)
+            item_obj = self.interaction_tool.get_item(item_id=item_id)
+            
+            clean_user = self._format_user_profile(user_obj)
+            clean_item = self._format_item_profile(item_obj)
+
+            # --- HYBRID RAG MEMORY ---
+            rag_context_str = "(No memory context available)"
+            
+            if self.memory:
+                # 1. Inject Tool (Crucial for fetching Item Consensus)
+                if hasattr(self.memory, 'set_tool'):
+                    self.memory.set_tool(self.interaction_tool)
+                
+                # 2. Construct Query for Global DB
+                # Helper to get "Title (Category)" for semantic search
+                item_title = item_obj.get('name') or item_obj.get('title') or "Unknown"
+                cats = item_obj.get('categories', '')
+                # Handle list of lists if necessary, or just stringify
+                cat_str = str(cats)
+                
+                # Packed format: USER_ID | ITEM_ID | QUERY_TEXT
+                query_payload = f"{user_id}|{item_id}|Item: {item_title} ({cat_str})"
+                
+                # 3. Retrieve
+                # This returns the big formatted string from HybridRAGMemory
+                rag_context_str = self.memory(query_payload)
+
+            # --- Build Prompt ---
+            task_desc_str = TASK_DESCRIPTION.format(
+                user=clean_user,
+                business=clean_item,
+                rag_context=rag_context_str, # Injects both history and community opinions
             )
-        
-        logger.info(f"Agent Initialized. Reflection: {self.config.use_reflection}")
 
-    def _call_llm(self, prompt: str, temp: float = 0.4) -> str:
-        messages = [{"role": "user", "content": prompt}]
-        result = self.llm(messages=messages, temperature=temp, max_tokens=4096)
-        return result.strip() if isinstance(result, str) else ""
+            # --- Reasoning (CoT) ---
+            result = self.reasoning(task_desc_str)
 
-    def _get_clean_item_text(self, item):
-        """Helper to create the search query from item metadata"""
-        title = item.get('name') or item.get('title') or "Unknown Item"
-        cats = item.get('categories', '')
-        if isinstance(cats, list):
-            flat_cats = set()
-            for c in cats:
-                if isinstance(c, list): flat_cats.update(c)
-                else: flat_cats.add(c)
-            cat_str = ", ".join(list(flat_cats)[:5])
-        else:
-            cat_str = str(cats)
-        return f"{title} ({cat_str})"
-
-    # ---------- Stage 1: Persona (Hybrid RAG) ----------
-    def _stage1_persona(self, user_profile: str, recent_reviews: list, relevant_reviews: list) -> str:
-        print("  -> Generating Persona (Hybrid)...") 
-
-        # Helper to format reviews nicely
-        def format_reviews(revs):
-            if not revs: return "None."
-            block = ""
-            for i, r in enumerate(revs):
-                # Handle both dicts (recent) and Chroma metadata (relevant)
-                item = r.get('item_name') or r.get('item_desc', 'Product')
-                text = r.get('text', '')
-                stars = r.get('stars', 'N/A')
-                block += f"- [{item}] ({stars} stars): {text}\n"
-            return block
-
-        # Populate the prompt with BOTH sets
-        prompt = PERSONA_PROMPT.format(
-            user_profile=user_profile, 
-            recent_reviews=format_reviews(recent_reviews),
-            relevant_reviews=format_reviews(relevant_reviews)
-        )
-        return self._call_llm(prompt)
-
-    # ---------- Stage 2: Planning & Reflection ----------
-    def _stage2_plan(self, persona: str, business_info: str, similar_reviews: str) -> str:
-        print("  -> Planning Rating & Outline...") 
-        prompt = PLANNING_PROMPT.format(
-            persona=persona,
-            business=business_info,
-            similar_reviews=similar_reviews
-        )
-        plan = self._call_llm(prompt)
-
-        if self.config.use_reflection:
-            print("  -> Reflecting/Critiquing Plan...") 
-            critic_prompt = REFLECTION_PROMPT.format(plan=plan)
-            refined_plan = self._call_llm(critic_prompt, temp=0.1)
-            return refined_plan
-        
-        return plan
-
-    def _parse_rating(self, plan: str) -> float:
-        if not plan: return 3.0
-        try:
-            lines = plan.splitlines()
-            rating_line = next((line for line in lines if "rating:" in line), None)
-            if rating_line:
-                val_part = rating_line.split(":", 1)[1].strip().split()[0]
-                val = float(val_part)
-                if 1.0 <= val <= 5.0: return val
-        except Exception:
-            pass
-        return 3.0 
-
-    # ---------- Stage 3: Writing ----------
-    def _stage3_write(self, persona: str, business: str, rating: float, plan: str) -> str:
-        print("  -> Drafting Final Review...") 
-        prompt = FINAL_WRITING_PROMPT.format(
-            persona=persona,
-            business=business,
-            rating=rating,
-            plan=plan
-        )
-        return self._call_llm(prompt)[:2048]
-
-    # ---------- Main Workflow ----------
-    def workflow(self):
-        try:
-            print(f"\n[Task Start] User: {self.task['user_id']} | Item: {self.task['item_id']}") 
-            
-            user_obj = self.interaction_tool.get_user(user_id=self.task['user_id'])
-            item_obj = self.interaction_tool.get_item(item_id=self.task['item_id'])
-            
-            # 1. SET A: Recent History (For Voice)
-            # The interaction_tool returns list; usually index 0 is most recent or oldest
-            # We take a slice to get a snapshot of 'general' writing style
-            all_user_reviews = self.interaction_tool.get_reviews(user_id=self.task['user_id'])
-            recent_reviews_set = all_user_reviews[:3]
-
-            # 2. SET B: Relevant History (For Stance)
-            relevant_reviews_set = []
-            rag_details = [] 
-            
-            if self.config.memory_type == "global_rag" and self.rag_engine:
-                print("  -> Retrieving Relevant Context...")
-                query_text = f"Item: {self._get_clean_item_text(item_obj)}"
+            # --- Parse Output (Same as before) ---
+            stars = 0.0
+            review_text = ""
+            try:
+                lines = [ln.strip() for ln in result.splitlines() if ln.strip()]
                 
-                # Fetch top 3 relevant reviews
-                relevant_reviews_set = self.rag_engine.retrieve(
-                    user_id=self.task['user_id'],
-                    query_item_text=query_text,
-                    k=3 
-                )
-                
-                # Logging details
-                for r in relevant_reviews_set:
-                    rag_details.append({
-                        "user_check": r.get('user_id'),
-                        "item": r.get('item_desc', 'Unknown'),
-                        "stars": r.get('stars'),
-                        "snippet": r.get('text', '')[:100] + "..."
-                    })
+                stars_line = next((ln for ln in lines if "stars:" in ln.lower()), None)
+                if stars_line:
+                    match = re.search(r"stars:\s*([0-9.]+)", stars_line, re.IGNORECASE)
+                    if match: stars = float(match.group(1))
 
-            # 3. Pipeline Execution
-            persona = self._stage1_persona(str(user_obj), recent_reviews_set, relevant_reviews_set)
-            
-            reviews_item = self.interaction_tool.get_reviews(item_id=self.task['item_id'])
-            similar_reviews_text = "\n".join([r.get('text','') for r in reviews_item[:3]])
-            
-            plan = self._stage2_plan(persona, str(item_obj), similar_reviews_text)
-            rating = self._parse_rating(plan)
-            review = self._stage3_write(persona, str(item_obj), rating, plan)
-            
-            return {
-                "stars": float(rating),
-                "review": review,
-                "rag_context": json.dumps(rag_details, indent=2), 
-                "persona": persona
-            }
-            
+                review_line_index = next((i for i, ln in enumerate(lines) if "review:" in ln.lower()), None)
+                if review_line_index is not None:
+                    first_line_content = lines[review_line_index].split(":", 1)[1].strip()
+                    rest_of_content = " ".join(lines[review_line_index+1:])
+                    review_text = f"{first_line_content} {rest_of_content}".strip()
+                
+                if not review_text and stars_line:
+                    review_text = result.replace(stars_line, "").strip()
+
+            except Exception as parse_e:
+                logger.warning(f"Failed to parse output: {parse_e}")
+
+            if stars <= 0 or stars > 5: stars = 3.0
+            if not review_text: review_text = "Review generation failed."
+
+            return {"stars": float(stars), "review": review_text[:512]}
+
         except Exception as e:
-            print(f"Error in workflow: {e}")
-            import traceback
-            traceback.print_exc()
+            logger.exception(f"Error in workflow: {e}")
             return {"stars": 0.0, "review": ""}
