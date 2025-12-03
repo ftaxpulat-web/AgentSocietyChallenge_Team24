@@ -417,7 +417,7 @@ if __name__ == "__main__":
     # Set the data
     task_set = "amazon" # "goodreads" or "yelp"
     try:
-        simulator = Simulator(data_dir="./amazon_data_processed", device="gpu", cache=False)
+        simulator = Simulator(data_dir="../big_data", device="gpu", cache=False)
         simulator.set_task_and_groundtruth(task_dir=f"./example/track1/{task_set}/tasks", groundtruth_dir=f"./example/track1/{task_set}/groundtruth")
 
         # Set the agent and LLM

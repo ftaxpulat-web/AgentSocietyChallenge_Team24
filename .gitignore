@@ -21,3 +21,5 @@ data/
 results/
 amazon_data/
 amazon_data_processed/
+.venv/
+venv/
