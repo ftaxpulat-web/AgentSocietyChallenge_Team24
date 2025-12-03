@@ -175,6 +175,59 @@ Do not include any other sections or headings.
             print("Error parsing rating from line:", rating_line, "error:", e)
             return 0.0
 
+    def _stage2b_reflect_plan(self, persona: str, user: str, business: str, plan: str) -> str:
+        """
+        Use ReasoningBaseline as a self-critique step on the rating plan.
+
+        It checks whether the draft rating + explanation + outline are
+        consistent with the persona and business, and fixes them if needed.
+        """
+        task_description = f"""
+        You are checking the reasoning of a simulated Yelp user.
+
+        User persona:
+        {persona}
+
+        Raw user object:
+        {user}
+
+        Business:
+        {business}
+
+        Initial plan (rating + explanation + outline):
+        {plan}
+
+        Your job:
+        1. Check whether the proposed rating is consistent with the persona and the business.
+        2. Check whether the explanation and bullet points match the rating and persona.
+        3. If everything already looks consistent and reasonable, return the SAME plan.
+        4. Otherwise, adjust the rating and/or explanation and outline so they become consistent.
+
+        You MUST output in exactly this format:
+
+        rating: [one of 1.0, 2.0, 3.0, 4.0, 5.0]
+        explanation: [1-2 sentences explaining the rating]
+        outline:
+        - [point 1]
+        - [point 2]
+        - [point 3]
+        [optional more bullet points]
+        """
+
+        # ReasoningBaseline is a thin wrapper around the LLM
+        refined_plan = self.reasoning(task_description)
+
+        if not isinstance(refined_plan, str) or "rating:" not in refined_plan:
+            logging.warning("Reflection step failed or missing 'rating:'; falling back to raw plan.")
+            return plan
+
+        # Optional: log and store reflection in memory
+        logging.info("=== Raw plan ===\n%s", plan)
+        logging.info("=== Refined plan ===\n%s", refined_plan)
+        self.memory(f"review: rating_reflection: {refined_plan}")
+
+        return refined_plan.strip()
+
     # ---------- Stage 3: Final review generation ----------
     def _stage3_final_review(self, persona: str, business, rating: float, plan: str) -> str:
         """
@@ -210,9 +263,22 @@ You MUST output ONLY the review text, with no extra labels or explanation.
     def workflow(self):
         """
         Simulate user behavior with 3-stage pipeline:
-        1) Persona inference  2) Rating plan  3) Final review
+        1) Persona inference  2) Rating plan (+ reflection)  3) Final review
         """
         try:
+            # NEW: high-level plan from PlanningBaseline (for logging / analysis)
+            task_description = {
+                "user_id": self.task["user_id"],
+                "item_id": self.task["item_id"],
+            }
+            high_level_plan = self.planning(task_description)
+            logging.info(
+                "High-level plan for user %s / item %s: %s",
+                self.task.get("user_id"),
+                self.task.get("item_id"),
+                high_level_plan,
+            )
+
             # Basic retrieval
             user_obj = self.interaction_tool.get_user(user_id=self.task['user_id'])
             business_obj = self.interaction_tool.get_item(item_id=self.task['item_id'])
@@ -240,24 +306,38 @@ You MUST output ONLY the review text, with no extra labels or explanation.
             if not similar_reviews_text:
                 similar_reviews_text = "There are no prior reviews available for this business."
 
-            # Stage 2: Rating + plan
-            plan = self._stage2_rating_plan(
+            # Stage 2: initial rating + plan
+            raw_plan = self._stage2_rating_plan(
                 persona=persona,
                 user=user,
                 business=business,
-                similar_reviews_text=similar_reviews_text
+                similar_reviews_text=similar_reviews_text,
             )
-            rating = self._parse_rating_from_plan(plan)
+
+            # Stage 2b: reflection / self-consistency check using ReasoningBaseline
+            refined_plan = self._stage2b_reflect_plan(
+                persona=persona,
+                user=user,
+                business=business,
+                plan=raw_plan,
+            )
+
+            # Prefer rating from refined plan; fall back if parsing fails
+            rating = self._parse_rating_from_plan(refined_plan)
             if rating == 0.0:
-                # Fallback to neutral rating if parse fails
-                rating = 3.0
+                rating = self._parse_rating_from_plan(raw_plan)
+            if rating == 0.0:
+                rating = 3.0  # last-resort neutral rating
+
+            # Use refined plan if available for final review
+            plan_for_review = refined_plan if refined_plan else raw_plan
 
             # Stage 3: Final review text
             final_review = self._stage3_final_review(
                 persona=persona,
                 business=business,
                 rating=rating,
-                plan=plan
+                plan=plan_for_review,
             )
 
             return {
@@ -427,7 +507,7 @@ if __name__ == "__main__":
 
         # Run the simulation
         # If you don't set the number of tasks, the simulator will run all tasks.
-        outputs = simulator.run_simulation(number_of_tasks=5, enable_threading=False, max_workers=1)
+        outputs = simulator.run_simulation(number_of_tasks=25, enable_threading=False, max_workers=1)
         print("Simulation finished, evaluating...")
         
         # Evaluate the agent
