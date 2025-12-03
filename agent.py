@@ -57,13 +57,27 @@ class ReasoningBaseline(ReasoningBase):
 
 class MySimulationAgent(SimulationAgent):
     """Participant's implementation of SimulationAgent with a 3-stage pipeline."""
+    USE_MEMORY = False          # ablation toggle
+    USE_REFLECTION = True
+    MAX_ITEM_MEM = 25           # limit how many item reviews you embed/store
+    _shared_memory = None       # shared across tasks in one run
 
     def __init__(self, llm: LLMBase):
         """Initialize MySimulationAgent"""
         super().__init__(llm=llm)
         self.planning = PlanningBaseline(llm=self.llm)
         self.reasoning = ReasoningBaseline(profile_type_prompt='', llm=self.llm)
-        self.memory = DummyMemory()#MemoryDILU(llm=self.llm)
+        
+        use_mem = bool(getattr(self.__class__, "USE_MEMORY", False))
+
+        if use_mem:
+            # One shared memory instance across all tasks in this run
+            if self.__class__._shared_memory is None:
+                self.__class__._shared_memory = MemoryDILU(llm=self.llm)
+            self.memory = self.__class__._shared_memory
+        else:
+            self.memory = DummyMemory()
+
 
     # ---------- Helper: safe LLM call with one prompt string ----------
     def _call_llm(self, prompt: str) -> str:
@@ -111,7 +125,7 @@ Output your answer as 2-4 sentences in plain English, addressing all three point
 """
         persona = self._call_llm(prompt)
         # Optionally store persona in memory for reuse
-        self.memory(f"persona: {persona}")
+        self.memory(f"review: persona_summary: {persona}")
         return persona
 
     # ---------- Stage 2: Rating & content planning ----------
@@ -175,59 +189,6 @@ Do not include any other sections or headings.
             print("Error parsing rating from line:", rating_line, "error:", e)
             return 0.0
 
-    def _stage2b_reflect_plan(self, persona: str, user: str, business: str, plan: str) -> str:
-        """
-        Use ReasoningBaseline as a self-critique step on the rating plan.
-
-        It checks whether the draft rating + explanation + outline are
-        consistent with the persona and business, and fixes them if needed.
-        """
-        task_description = f"""
-        You are checking the reasoning of a simulated Yelp user.
-
-        User persona:
-        {persona}
-
-        Raw user object:
-        {user}
-
-        Business:
-        {business}
-
-        Initial plan (rating + explanation + outline):
-        {plan}
-
-        Your job:
-        1. Check whether the proposed rating is consistent with the persona and the business.
-        2. Check whether the explanation and bullet points match the rating and persona.
-        3. If everything already looks consistent and reasonable, return the SAME plan.
-        4. Otherwise, adjust the rating and/or explanation and outline so they become consistent.
-
-        You MUST output in exactly this format:
-
-        rating: [one of 1.0, 2.0, 3.0, 4.0, 5.0]
-        explanation: [1-2 sentences explaining the rating]
-        outline:
-        - [point 1]
-        - [point 2]
-        - [point 3]
-        [optional more bullet points]
-        """
-
-        # ReasoningBaseline is a thin wrapper around the LLM
-        refined_plan = self.reasoning(task_description)
-
-        if not isinstance(refined_plan, str) or "rating:" not in refined_plan:
-            logging.warning("Reflection step failed or missing 'rating:'; falling back to raw plan.")
-            return plan
-
-        # Optional: log and store reflection in memory
-        logging.info("=== Raw plan ===\n%s", plan)
-        logging.info("=== Refined plan ===\n%s", refined_plan)
-        self.memory(f"review: rating_reflection: {refined_plan}")
-
-        return refined_plan.strip()
-
     # ---------- Stage 3: Final review generation ----------
     def _stage3_final_review(self, persona: str, business, rating: float, plan: str) -> str:
         """
@@ -263,22 +224,9 @@ You MUST output ONLY the review text, with no extra labels or explanation.
     def workflow(self):
         """
         Simulate user behavior with 3-stage pipeline:
-        1) Persona inference  2) Rating plan (+ reflection)  3) Final review
+        1) Persona inference  2) Rating plan  3) Final review
         """
         try:
-            # NEW: high-level plan from PlanningBaseline (for logging / analysis)
-            task_description = {
-                "user_id": self.task["user_id"],
-                "item_id": self.task["item_id"],
-            }
-            high_level_plan = self.planning(task_description)
-            logging.info(
-                "High-level plan for user %s / item %s: %s",
-                self.task.get("user_id"),
-                self.task.get("item_id"),
-                high_level_plan,
-            )
-
             # Basic retrieval
             user_obj = self.interaction_tool.get_user(user_id=self.task['user_id'])
             business_obj = self.interaction_tool.get_item(item_id=self.task['item_id'])
@@ -296,48 +244,80 @@ You MUST output ONLY the review text, with no extra labels or explanation.
             # Stage 1: Persona
             persona = self._stage1_persona(user=user, user_reviews=reviews_user)
 
-            # Build a short similar-review text block for the item
-            K_sim = 3
-            selected_item_reviews = reviews_item[:K_sim]
-            similar_reviews_text = "\n\n".join(
-                f"- Review {i+1} (stars: {r.get('stars', 'N/A')}): {r.get('text', '')}"
-                for i, r in enumerate(selected_item_reviews)
-            )
-            if not similar_reviews_text:
-                similar_reviews_text = "There are no prior reviews available for this business."
+            # ---- Memory-based selection of item reviews ----
+            use_mem = bool(getattr(self.__class__, "USE_MEMORY", False))
 
-            # Stage 2: initial rating + plan
-            raw_plan = self._stage2_rating_plan(
+            if use_mem:
+                MAX_ITEM_MEM = getattr(self.__class__, "MAX_ITEM_MEM", 25)
+
+                for r in reviews_item[:MAX_ITEM_MEM]:
+                    txt = (r.get("text") or "").strip()
+                    if not txt:
+                        continue
+                    stars = r.get("stars", "N/A")
+                    self.memory(f"review: item_review item_id={self.task['item_id']} stars={stars} text={txt}")
+
+                retrieved_item_review = self.memory(
+                    f"Find the most relevant item_review for this persona.\nPersona: {persona}\nBusiness: {business}\nitem_id={self.task['item_id']}"
+                )
+
+                if retrieved_item_review and retrieved_item_review.strip():
+                    similar_reviews_text = retrieved_item_review.strip()
+                else:
+                    # fallback
+                    K_sim = 3
+                    selected_item_reviews = reviews_item[:K_sim]
+                    similar_reviews_text = "\n\n".join(
+                        f"- Review {i+1} (stars: {r.get('stars', 'N/A')}): {r.get('text', '')}"
+                        for i, r in enumerate(selected_item_reviews)
+                    ) or "There are no prior reviews available for this business."
+            else:
+                # Memory OFF = always use the original baseline-style selection
+                K_sim = 3
+                selected_item_reviews = reviews_item[:K_sim]
+                similar_reviews_text = "\n\n".join(
+                    f"- Review {i+1} (stars: {r.get('stars', 'N/A')}): {r.get('text', '')}"
+                    for i, r in enumerate(selected_item_reviews)
+                ) or "There are no prior reviews available for this business."
+
+            # Stage 2: Rating + plan
+            plan = self._stage2_rating_plan(
                 persona=persona,
                 user=user,
                 business=business,
                 similar_reviews_text=similar_reviews_text,
             )
 
-            # Stage 2b: reflection / self-consistency check using ReasoningBaseline
-            refined_plan = self._stage2b_reflect_plan(
-                persona=persona,
-                user=user,
-                business=business,
-                plan=raw_plan,
-            )
+            use_reflection = bool(getattr(self.__class__, "USE_REFLECTION", True))
 
-            # Prefer rating from refined plan; fall back if parsing fails
-            rating = self._parse_rating_from_plan(refined_plan)
-            if rating == 0.0:
-                rating = self._parse_rating_from_plan(raw_plan)
-            if rating == 0.0:
-                rating = 3.0  # last-resort neutral rating
+            if use_reflection:
+                refined_plan = self._stage2b_reflect_plan(
+                    persona=persona,
+                    user=user,
+                    business=business,
+                    plan=plan,
+                )
 
-            # Use refined plan if available for final review
-            plan_for_review = refined_plan if refined_plan else raw_plan
+                # Prefer rating from refined plan; fall back to raw plan
+                rating = self._parse_rating_from_plan(refined_plan)
+                if rating == 0.0:
+                    rating = self._parse_rating_from_plan(plan)
+
+                plan_for_review = refined_plan if refined_plan else plan
+            else:
+                # No reflection: use the raw plan directly
+                rating = self._parse_rating_from_plan(plan)
+                plan_for_review = plan
+
+            if rating == 0.0:
+                rating = 3.0  # last resort neutral
 
             # Stage 3: Final review text
             final_review = self._stage3_final_review(
                 persona=persona,
                 business=business,
                 rating=rating,
-                plan=plan_for_review,
+                plan=plan
             )
 
             return {
@@ -497,6 +477,14 @@ if __name__ == "__main__":
     # Set the data
     task_set = "amazon" # "goodreads" or "yelp"
     try:
+        use_memory = os.environ.get("USE_MEMORY", "0") == "1"
+        use_reflection = os.environ.get("USE_REFLECTION", "1") == "1"
+
+        MySimulationAgent.USE_MEMORY = use_memory
+        MySimulationAgent.USE_REFLECTION = use_reflection
+
+        print(f"[Config] USE_MEMORY={use_memory} USE_REFLECTION={use_reflection}")
+
         simulator = Simulator(data_dir="../big_data", device="gpu", cache=False)
         simulator.set_task_and_groundtruth(task_dir=f"./example/track1/{task_set}/tasks", groundtruth_dir=f"./example/track1/{task_set}/groundtruth")
 
@@ -512,7 +500,7 @@ if __name__ == "__main__":
         
         # Evaluate the agent
         evaluation_results = simulator.evaluate()       
-        with open(f'./results/evaluation_results_track1_{task_set}.json', 'w') as f:
+        with open(f'./results/evaluation_results_track1_{task_set}_mem{int(use_memory)}_refl{int(use_reflection)}.json', 'w') as f:
             json.dump(evaluation_results, f, indent=4)
 
         # Get evaluation history
