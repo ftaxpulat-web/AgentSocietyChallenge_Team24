@@ -80,7 +80,13 @@ class RecMemory:
           - Return the stored profile (may be "" if not set yet).
         """
         if review_text:
-            self._user_profile = self._build_profile(review_text)
+            cleaned = review_text.strip()
+            print("RecMemory.__call__ got review_text:", repr(cleaned)[:200])
+            if cleaned and cleaned not in ("[]", "{}", "None"):
+                self._user_profile = self._build_profile(cleaned)
+            else:
+                # Optional: log once for debugging
+                print("RecMemory: review_text is empty / uninformative, skipping LLM.")
         return self._user_profile
 
     def _build_profile(self, review_text: str) -> str:
@@ -110,13 +116,15 @@ User review history:
             raw = self.llm(
                 messages=messages,
                 temperature=0.1,
-                max_tokens=256,
+                max_tokens=4096,
             )
         except Exception as e:
             print("RecMemory: error while summarizing reviews:", repr(e))
             return ""
-
-        return self._to_exact_n_sentences(raw, self.max_sentences)
+        sentences = self._to_exact_n_sentences(raw, self.max_sentences)
+        print("RecMemory: prompt:", prompt)
+        print("RecMemory: built user profile:", sentences)
+        return sentences
 
     def _to_exact_n_sentences(self, text: str, n: int) -> str:
         """
@@ -174,12 +182,20 @@ class RecReasoning(ReasoningBase):
         user_profile = ""
         if self.memory is not None:  # retrieve the stored profile
             user_profile = self.memory() or ""
+        if user_profile:
+            profile_block = user_profile
+        else:
+            profile_block = (
+                "No reliable user review history is available. "
+                "Treat the user as a cold-start user and rely on item features "
+                "and general appeal only."
+            )
 
         prompt = f"""
 You are a recommendation ranking model.
 
 User preference summary (5 sentences):
-{user_profile}
+{profile_block}
 
 Task:
 - For this user, assign a relevance score from 0.0 to 10.0 to EACH candidate item ID.
@@ -237,8 +253,7 @@ class MyRecommendationAgent(RecommendationAgent):
 
     def __init__(self, llm: LLMBase):
         super().__init__(llm=llm)
-        self.memory = RecMemory(llm=self.llm, max_sentences=5)
-        self.planning = RecPlanning(llm=self.llm)
+        self.memory = RecMemory(llm=llm, max_sentences=5)
         self.reasoning = RecReasoning(profile_type_prompt='', llm=self.llm, memory=self.memory)
         self.platform: str = "unknown"  # "yelp" | "amazon" | "goodreads" | "unknown"
 
@@ -338,7 +353,7 @@ class MyRecommendationAgent(RecommendationAgent):
         keys_to_keep = base_keys + extra_keys
         filtered = {k: item[k] for k in keys_to_keep if k in item}
         if "description" in filtered:
-            filtered["description"] = str(filtered["description"])[:500]
+            filtered["description"] = str(filtered["description"])[:100]
         return filtered
 
     def _normalize_review_list(self, reviews_raw):
@@ -369,7 +384,7 @@ class MyRecommendationAgent(RecommendationAgent):
 
         score = 0.0
 
-        # POsitive signals
+        # Positive signals
         for key in ["useful", "funny", "cool", "votes", "vote",
                     "helpful", "helpful_votes", "n_votes"]:
             val = r.get(key, 0) or 0
@@ -385,7 +400,7 @@ class MyRecommendationAgent(RecommendationAgent):
         if platform == "amazon":
             # Verified bonus
             if r.get("verified_purchase") or r.get("verified", False):
-                score += 3.0
+                score += 1.0
 
         if platform == "goodreads":
             # Read reviews more important
@@ -401,7 +416,7 @@ class MyRecommendationAgent(RecommendationAgent):
         for key in ["date", "review_date", "timestamp", "time"]:
             val = r.get(key, None)
             if isinstance(val, (int, float)):
-                score += 0.000000001 * float(val)
+                score += 0.00000001 * float(val)
 
         return score
 
@@ -409,7 +424,7 @@ class MyRecommendationAgent(RecommendationAgent):
         self,
         reviews_raw,
         platform: str,
-        max_reviews: int = 10
+        max_reviews: int = 20
     ) -> list[dict]:
         """
         Take all user reviews and keep the most informative ones,
@@ -433,7 +448,7 @@ class MyRecommendationAgent(RecommendationAgent):
         We only keep a few key fields plus text to avoid blowing up tokens.
         """
         lines = []
-        for r in reviews[:10]:
+        for r in reviews[:20]:
             if not isinstance(r, dict):
                 continue
 
@@ -539,6 +554,7 @@ class MyRecommendationAgent(RecommendationAgent):
                 raw_reviews = self.interaction_tool.get_reviews(
                     user_id=self.task['user_id']
                 )
+                print("DEBUG raw_reviews for user", self.task['user_id'], "->", type(raw_reviews), repr(raw_reviews)[:500])
                 selected_reviews = self._select_informative_reviews(
                     raw_reviews,
                     platform=platform,
@@ -599,7 +615,7 @@ USER_INFO:
 CANDIDATE_ITEMS_INFO:
 {item_list}
 """.strip()
-
+        print("Final task_description for reasoning:", task_description)
         result = self.reasoning(task_description)
 
         candidate_list = list(self.task.get("candidate_list", []))
@@ -779,9 +795,9 @@ class GeminiLLM(LLMBase):
             return ""
 
         # DEBUG: see raw response and finish_reason
-        # print("Gemini raw response:", repr(response))
-        # for cand in response.candidates:
-        #     print("Finish reason:", getattr(cand, "finish_reason", None))
+        print("Gemini raw response:", repr(response))
+        for cand in response.candidates:
+           print("Finish reason:", getattr(cand, "finish_reason", None))
 
         text = self._extract_text_from_response(response)
 
@@ -812,7 +828,7 @@ if __name__ == "__main__":
     # --- STEP 1: test run_simulation only ---
     print("About to run simulation...")
     agent_outputs = simulator.run_simulation(
-        number_of_tasks=5, enable_threading=False, max_workers=1
+        number_of_tasks=25, enable_threading=False, max_workers=1
     )
     print("Simulation finished. ") # Sample output for first task:", agent_outputs[:1])
 
@@ -841,6 +857,19 @@ if __name__ == "__main__":
 
         gt_items.append(gt_item_id)
 
+    for i, scenario in enumerate(agent_outputs):
+        task = scenario["task"]
+        pred_list = scenario["output"]
+        cand_list = task["candidate_list"]
+        gt_id = gt_items[i]
+
+        print(f"Scenario {i}")
+        print("  GT item:", gt_id)
+        print("  In candidate_list?", gt_id in cand_list)
+        print("  In pred_list?", gt_id in pred_list)
+        print()
+
+
     # Compute RMSE of rank (1 = best possible)
     squared_errors = []
     for idx, (pred, gt_id) in enumerate(zip(agent_outputs, gt_items)):
@@ -853,6 +882,8 @@ if __name__ == "__main__":
         if not isinstance(pred_list, list):
             print(f"WARNING: prediction for scenario {idx} has unexpected type:", type(pred_list), pred_list)
             continue
+        if gt_id not in pred_list:
+            print(f"[DEBUG] GT id {gt_id} not in prediction list for scenario {idx}")
 
         if gt_id in pred_list:
             # rank index (1-based)

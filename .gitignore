@@ -22,3 +22,5 @@ results/
 amazon_data/
 amazon_data_processed/
 /yelp_data
+data_process_tiny_amazon.py
+/tiny_data
