@@ -15,12 +15,27 @@ __*
 __*/
 !__init__.py
 TODO
-db/
-data/
-.env
-results/
 amazon_data/
 amazon_data_processed/
-/yelp_data
 data_process_tiny_amazon.py
-/tiny_data
+
+# Ignore Datasets
+data/
+dataset/
+dataset_trunc/
+tiny_data/
+/yelp_data
+
+# Ignore Vector DBs and Cache
+db/
+db_temp/
+lmdb_cache/
+__pycache__/
+
+# Optional: Ignore results if you don't want to sync them to GitHub
+results/
+
+# Ignore Environment variables
+.env
+
+global_chroma_db/
