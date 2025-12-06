@@ -1,0 +1,10 @@
+{
+    "exp_name": "step2_dilu_cot",
+    "memory_type": "dilu",
+    "reasoning_type": "cot",
+    "planning_type": "io",
+    "task_count": 50,
+    "model_name": "gemini-2.5-flash",
+    "base_dir": "/home/jef/AgentSocietyChallenge_Team24",
+    "data_dir": "/home/jef/AgentSocietyChallenge_Team24/dataset"
+}

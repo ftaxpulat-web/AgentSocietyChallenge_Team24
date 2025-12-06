@@ -30,9 +30,6 @@ db_temp/
 lmdb_cache/
 __pycache__/
 
-# Optional: Ignore results if you don't want to sync them to GitHub
-results/
-
 # Ignore Environment variables
 .env
 

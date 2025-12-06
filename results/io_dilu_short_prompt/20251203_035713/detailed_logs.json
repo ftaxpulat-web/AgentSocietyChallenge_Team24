@@ -1,0 +1,47 @@
+[
+    {
+        "task_id": 0,
+        "user_id": "AF6HG5ZKZR4N2BTWJ7FGMXZO3JEQ",
+        "item_id": "B09LLZN3V3",
+        "real_stars": 4.0,
+        "pred_stars": 5.0,
+        "real_review": "The NexiGo Gripcon is a solid addition to my Nintendo Switch setup, offering a comfortable and ergonomic design that enhances my gaming experience. The controller is durable and the mappable back buttons are a nice touch, though I don't find them particularly useful. The 6-Axis Gyro and dual-motor vibration add to the immersion, and the ability to charge while playing is a plus. However, the joystick responsiveness could be better, and the controller is a bit heavy. Overall, it's a good investment for Switch owners looking to improve their handheld gaming.",
+        "pred_review": "This NexiGo Gripcon is a fantastic upgrade for handheld Switch gaming. The ergonomic design makes long sessions super comfortable, and the mappable back buttons are a total game-changer for customization. It's plug-and-play, even charging your Switch while you play. Highly recommend for any serious Switch owner!"
+    },
+    {
+        "task_id": 1,
+        "user_id": "AHJLIZ2I33CYSBMESAQRJ6QOIKKQ",
+        "item_id": "B0BFKDTY8M",
+        "real_stars": 4.0,
+        "pred_stars": 4.5,
+        "real_review": "These SwiftGrip Disposable Nitrile Exam Gloves are a solid choice for a variety of tasks, from food prep to household cleaning. The gloves are comfortable, fit well, and provide reliable protection. While they are a bit thinner than I expected, they are surprisingly durable and offer good tactile sensitivity. The price is a bit higher than I'd like for a 50-count box, but the quality and versatility make them a decent value. I would recommend these gloves for anyone looking for a reliable, latex-free option.",
+        "pred_review": "Finally found some XL nitrile gloves that actually fit! These SwiftGrip black gloves go on smoothly without ripping, which is always my biggest pet peeve with disposables. The 3-mil thickness is perfect for keeping good dexterity while still offering protection for cleaning or light shop work. Definitely a good buy for the price."
+    },
+    {
+        "task_id": 2,
+        "user_id": "AE2KUXMITKIOF4TR5BPK3KLCQCGQ",
+        "item_id": "B004SPJP5O",
+        "real_stars": 4.0,
+        "pred_stars": 5.0,
+        "real_review": "I was quite impressed with the MG Chemicals 99.9% Isopropyl Alcohol Electronics Cleaner. It's highly effective for cleaning various surfaces, especially electronics, and the spray bottle is well-designed, making it easy to use. While it's a bit pricier than similar products, the quality and reliability justify the cost. However, I did notice that it can dry out my hands after prolonged use, which is a minor downside. Overall, it\u2019s a solid choice for anyone needing a high-quality cleaner.",
+        "pred_review": "This isopropyl alcohol is seriously good. I use it all the time to clean surfaces before I glue or tape things down. Dries super fast and leaves zero residue, which is key. Works perfectly every time."
+    },
+    {
+        "task_id": 3,
+        "user_id": "AHIJ2WZWTPK5EPJQQ7GLVKG5YDTA",
+        "item_id": "B06WWMGNV6",
+        "real_stars": 3.0,
+        "pred_stars": 5.0,
+        "real_review": "While the Hohner Progressive Series 560 Special 20 Harmonica A is praised for its excellent sound quality, ease of play, and overall reliability, it doesn't quite align with my usual preferences. As someone who values durability and high-quality materials, I found the use of plastic for the comb and the cheap cover screws to be disappointing. Additionally, the difficulty in bending certain notes, particularly the 2-draw, is a significant drawback. Despite these issues, the harmonica does offer good value for its price, making it a decent choice for beginners and casual players. However, for someone looking for a more robust and higher-quality instrument, it may fall short.",
+        "pred_review": "This Hohner Special 20 is everything I expected and more. The tone is rich and the response is fantastic, making bends easy and expressive. The plastic comb is super comfortable and feels really durable, a true testament to German craftsmanship. Definitely a top-notch harmonica for any player."
+    },
+    {
+        "task_id": 4,
+        "user_id": "AGWPXY5IPDBG6AB5UPBA46QTVP6Q",
+        "item_id": "B004Q7PTYU",
+        "real_stars": 3.0,
+        "pred_stars": 4.0,
+        "real_review": "I usually stick to video games, but I decided to give this bore gauge set a try since it seems to be a decent value for the price. The set works fine for occasional use, and the build quality is acceptable, though it's not as durable or precise as I would expect from a professional tool. The lack of detailed instructions can be a bit frustrating for first-time users, but it still gets the job done. Overall, it's a satisfactory purchase for the occasional hobbyist, but I wouldn't recommend it for daily professional use.",
+        "pred_review": "For the money, this bore gauge set is a solid buy. The 5/16\" - 6\" range covers a lot of common sizes, which is super handy. It's not a Starrett, but for general shop use and the price point, you really can't complain. Gets the job done without breaking the bank."
+    }
+]

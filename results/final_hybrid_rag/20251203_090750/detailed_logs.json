@@ -1,0 +1,452 @@
+[
+    {
+        "task_id": 0,
+        "user_id": "wAo7casDFsbUR4O8Vb3u8A",
+        "item_id": "cVoyA9wrdF5E8OroBahxCg",
+        "real_stars": 2.0,
+        "pred_stars": 1.0,
+        "real_review": "I had mixed feelings about my experience with Mad Batter Bakery. While the cupcakes and desserts were indeed delicious and beautifully presented, the service was unreliable, which is a big deal for me. The owner, Chelle, was responsive at first but then became uncommunicative, especially when issues arose. This inconsistency and lack of professionalism, particularly for important events, is a significant drawback. I appreciate the free delivery and the reasonable prices, but the reliability issues and unprofessional behavior make it hard to recommend this bakery without reservation.",
+        "pred_review": "Ordered some cupcakes for a small gathering. They were delivered on time, which was fine. But honestly, the taste was just average. Nothing really stood out, and I expected more given what I paid. Not impressed."
+    },
+    {
+        "task_id": 1,
+        "user_id": "tkSCd4gCwgh2XvDYmPlsPg",
+        "item_id": "T72WVqMPc67-DWCS8R_ASA",
+        "real_stars": 1.0,
+        "pred_stars": 1.0,
+        "real_review": "I had a terrible experience with Brighthouse Networks. The service is unreliable, with frequent outages and slow internet speeds. The customer service is a nightmare, with unhelpful representatives and long wait times. I also faced unexpected increases in my bill, and the company failed to honor promotions. It's frustrating to deal with a service provider that doesn't seem to care about their customers. I would strongly advise against using Brighthouse Networks.",
+        "pred_review": "Brighthouse Networks is an absolute scam. My bill went through the roof after they were bought out, just like I've heard from everyone else. The customer service is non-existent and they clearly don't care about their customers. This is not \"professional service\" by any stretch of the imagination. Avoid at all costs."
+    },
+    {
+        "task_id": 2,
+        "user_id": "1q6v24bV-zYk9trWszBB4A",
+        "item_id": "9Ti9wdW4CGlF2b_ZuvtpdQ",
+        "real_stars": 3.0,
+        "pred_stars": 3.5,
+        "real_review": "Bar Asia offers a unique dining experience with its modern and chic decor, which I found very appealing. The outdoor seating area is a nice touch, making it a great spot for a casual dinner. However, the service was a bit hit or miss. While some servers were attentive and friendly, others were slow and understaffed, which affected the overall dining experience. The food was fresh and the portions were reasonable, but the prices were a bit steep for what was offered. Overall, it's a decent place to try, but there's room for improvement in service and value.",
+        "pred_review": "Bar Asia has a pretty cool vibe with its warehouse-style interior, which felt quite chic and trendy. The service was definitely a highlight \u2013 very friendly and attentive throughout our visit. We tried some of the bowls and sushi. The bowls were fresh and tasty, but I did find the sushi to be a bit overpriced for the portion and quality. Also, our table had a slight wobble, which was a minor annoyance. It's a decent spot for Asian fusion, especially if you're looking for a happy hour or some outdoor seating."
+    },
+    {
+        "task_id": 3,
+        "user_id": "IXAcl59yp4JyifX9A4KWkw",
+        "item_id": "0-evjpRKnht75t9J3NE8Zw",
+        "real_stars": 2.0,
+        "pred_stars": 2.0,
+        "real_review": "Jet Rock Bar and Grill has a few redeeming qualities, such as its reasonable prices and good breakfast options, which align with my preference for affordability. However, the poor service, subpar food quality, and long wait times are significant drawbacks. The staff's inattentiveness and the unappealing menu options, especially for a casual dining bar, are particularly disappointing. While the place is clean and comfortable, the overall experience did not meet my expectations, and I would not recommend it to others.",
+        "pred_review": "Stopped into Jet Rock Bar and Grill during a layover, hoping for a decent spot to grab a bite. Unfortunately, it was a pretty disappointing experience. The service was incredibly slow and inattentive; it felt like the staff was completely disengaged. As for the atmosphere, it's practically non-existent \u2013 just a bland, uninviting space that doesn't even manage to be casually comfortable. The food and drinks were forgettable and certainly not worth the price. For an airport establishment, you'd expect at leas"
+    },
+    {
+        "task_id": 4,
+        "user_id": "dWgnBvdmIvLtk6Ciw9xCEg",
+        "item_id": "RROICJV1SdNKeua8QOSfhA",
+        "real_stars": 1.0,
+        "pred_stars": 1.0,
+        "real_review": "I had a terrible experience with Katona James A Sr Roofing. The service was unreliable and unresponsive, which is a huge red flag for me. Jim initially quoted a low price but kept increasing it as the work progressed, leading to significant financial stress. The quality of work was also poor, resulting in further leaks and water damage. His unprofessional behavior, including rude interactions and lack of transparency, made the entire process a nightmare. I cannot recommend this business to anyone.",
+        "pred_review": "After reading through the community reviews for Katona James A Sr Roofing, I wouldn't even consider hiring them. It's incredibly concerning to see multiple reports of legal issues, damage to homes, and guarantees not being honored. A roofing company needs to be reliable and trustworthy, and the accounts of price increases after a down payment and rude customer service are huge red flags. Homeowners deserve much better than what's being described here."
+    },
+    {
+        "task_id": 5,
+        "user_id": "6JcBAl3H_VGT5ipcPrpDOA",
+        "item_id": "vLpLGCbAtuxFzu2ka138aA",
+        "real_stars": 1.0,
+        "pred_stars": 4.0,
+        "real_review": "I decided to give Barnet Fair a try, but unfortunately, it didn't meet my expectations. The stylists were praised by others, but my experience was far from positive. My brows were shaped poorly, and the customer service was lacking. I felt rushed and undervalued, and the overall atmosphere didn't make me feel comfortable. Given my past experiences, I won't be returning.",
+        "pred_review": "I visited Barnet Fair for a haircut. The salon itself is quite charming, and I found the atmosphere pleasant. My stylist, Rachel, was competent and listened to what I wanted. The cut turned out well, and I was satisfied with the result. It's a good spot for a reliable haircut."
+    },
+    {
+        "task_id": 6,
+        "user_id": "meJ9sHOd-fE0jn1rw2nXow",
+        "item_id": "AKtLOAuqcb2GWXuiRW5Www",
+        "real_stars": 3.0,
+        "pred_stars": 4.0,
+        "real_review": "Twirls Frozen Yogurt is a place that caught my attention due to its bright and inviting atmosphere. The variety of delicious frozen yogurt flavors, especially the tart and pomegranate raspberry sorbet, is impressive, and the extensive topping selection, including fresh fruits and unique options like butterscotch chips, is a real plus. However, the service can be hit or miss, with some staff being friendly and helpful while others are less attentive. The pricing model, which charges by weight, can be steep, especially if you overfill your cup. Despite these drawbacks, the overall experience is still enjoyable, but there's room for improvement in consistency and value.",
+        "pred_review": "I finally got around to checking out Twirls Frozen Yogurt and I was pleasantly surprised! The place is really bright and clean, which is always a good sign. I loved the decor \u2013 it's got this fun, almost retro-futuristic vibe that makes it stand out. The music playing was upbeat and added to the nice atmosphere. They have a good selection of flavors and toppings, and the price per ounce is pretty standard. It's a great spot for a quick treat, especially with summer coming up. I'll definitely be back!"
+    },
+    {
+        "task_id": 7,
+        "user_id": "ScHwaxyOrnZZsk66S4NHrA",
+        "item_id": "Flut-RAHgxOwe_4FlkqGSQ",
+        "real_stars": 4.0,
+        "pred_stars": 4.0,
+        "real_review": "I had a great experience renting an RV from Cruise America Motorhome Rental & Sales. The staff, especially Hank, were incredibly helpful and made the entire process smooth and stress-free. The RV was clean, well-maintained, and comfortable, which made our trip enjoyable. The prices were also reasonable, and the check-in and check-out processes were efficient. While I did hear about some maintenance issues from other customers, my experience was overwhelmingly positive. I would definitely consider renting from them again in the future.",
+        "pred_review": "Rented an RV from Cruise America for a recent trip and had a pretty good experience overall. The staff was helpful and made the pickup and drop-off process straightforward. Our unit was comfortable and served its purpose well for the journey. It felt like a good value for what we paid, and there weren't any unexpected charges at the end, which is always a relief. While everything was generally fine, I can see how some units might have minor quirks, but ours was perfectly adequate. A solid choice for an RV r"
+    },
+    {
+        "task_id": 8,
+        "user_id": "FzTqrbKr-Bxle-eL2rNPbg",
+        "item_id": "KrKQChZ1hwHHVaUK9Zc-Ag",
+        "real_stars": 3.0,
+        "pred_stars": 2.0,
+        "real_review": "I visited Iron Hill Brewery & Restaurant and had a mixed experience. The atmosphere is clean and welcoming, and the staff was friendly and attentive, which I appreciated. The food was decent, with some standout dishes like the buffalo wings and pretzel sticks. However, the prices were a bit steep, and I felt that some of the portions were on the smaller side, which didn't provide the best value for money. While it's a good spot for a casual night out, I wouldn't say it's worth the higher prices for the quality of food and service received.",
+        "pred_review": "Came to Iron Hill for dinner. The beer was decent enough, but the food was a real letdown. I tried the grilled corned beef Reuben, and it was completely unremarkable, served on soggy bread. Upgrading to the sweet potato fries was a mistake; they were greasy and tasted undercooked. Service was fine, but the kitchen clearly needs to step it up. Not impressed."
+    },
+    {
+        "task_id": 9,
+        "user_id": "JkSiLxs14OOaD8hATWR-PQ",
+        "item_id": "L-f8TzrPaOztNMz7xikbNA",
+        "real_stars": 5.0,
+        "pred_stars": 4.5,
+        "real_review": "Family Eyecare at Westchase is an exceptional optometry practice that truly stands out. The staff, particularly Dr. Mertzlufft, are incredibly knowledgeable, friendly, and attentive, making the entire experience delightful. The office is clean and well-maintained, and they offer convenient hours, including Saturdays, which is a huge plus. The only potential downside could be the parking lot, but it's managed well and didn't detract from my positive visit. Highly recommend!",
+        "pred_review": "I had a very positive experience at Family Eyecare At Westchase. The staff were all very friendly and professional, making the visit quite pleasant. The doctor was thorough and took the time to explain everything clearly. I especially appreciated their Saturday hours, which made scheduling an appointment much more convenient. Parking in their lot was also easy. Overall, a solid choice for eye care."
+    },
+    {
+        "task_id": 10,
+        "user_id": "hG72KnoH6BqJUriH76ZjcA",
+        "item_id": "RBCtHLVvc230q8zkRWIoyQ",
+        "real_stars": 4.0,
+        "pred_stars": 4.5,
+        "real_review": "Creme Brulee Bistro & Cafe is a delightful spot that offers a cozy, casual, and classy atmosphere. The food quality is top-notch, especially the pastries and baked goods, which are fresh and delicious. The service is generally friendly and attentive, making the dining experience enjoyable. However, the place can get crowded, and the limited seating might be a drawback during peak hours. Despite these minor issues, the overall experience is very positive, and I would definitely recommend it to friends and family.",
+        "pred_review": "Decided to check out Creme Brulee Bistro & Cafe for a weekend breakfast, and it was a pleasant experience. The place has a really quaint and quiet atmosphere, which I appreciated for a relaxed start to the day. I ordered some crepes and an iced coffee, and everything was delicious. The crepes were definitely a highlight, very fresh and well-prepared. Street parking was available nearby, which was convenient. It's a great spot if you're looking for quality French-inspired breakfast or pastries in a cozy sett"
+    },
+    {
+        "task_id": 11,
+        "user_id": "Iu_0caGip_vp8EaTZIPhEA",
+        "item_id": "mcA7_ZHBxL30OLKjlmNmng",
+        "real_stars": 2.0,
+        "pred_stars": 2.0,
+        "real_review": "I had mixed feelings about Sansom Cleaners. While the alterations were top-notch and the staff were friendly and professional, the smoky smell on my clothes after cleaning was a significant downside. The prices were also higher than I'm comfortable with, especially for regular dry cleaning. Additionally, the long turn-around times and issues with stain removal made the overall experience less than satisfactory. I appreciate the quality when it comes to delicate items, but the negatives outweigh the positives for me.",
+        "pred_review": "I gave Sansom Cleaners a try because it was convenient. The hours are pretty good, which is a plus. However, the prices are definitely on the expensive side, which I noticed right away. More importantly, my clothes came back with a faint, odd smell, almost like smoke or something stale. That's not what I expect from a dry cleaner. I wouldn't really recommend it."
+    },
+    {
+        "task_id": 12,
+        "user_id": "Aoii1MTXAnc8G6kOC3j4gA",
+        "item_id": "WANyiYJgedwrNuV63x8s1g",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "Photographic Works offers a mix of high-quality services and a knowledgeable, friendly staff, which aligns well with my preference for excellent customer service and expertise. However, the business has some issues with inconsistency and reliability, which can be frustrating. Additionally, the prices are on the higher side, especially for basic services. While I appreciate the local and longstanding presence of the business, these drawbacks make it a bit of a mixed bag. Overall, it's a good option, but there's room for improvement in terms of consistency and pricing.",
+        "pred_review": "It's getting harder to find places that still develop film, so Photographic Works is a good option for that. I've used their scanning service, and while the quality was good, it definitely felt a bit expensive. I've also heard some mixed feedback about their E-6 processing being inconsistent, though I haven't personally had that issue. They have a parking lot which is convenient. Overall, it's a decent place for specific photography needs, but be aware of the costs for some services."
+    },
+    {
+        "task_id": 13,
+        "user_id": "BYj5LjLS7mMl7aExIcBe8Q",
+        "item_id": "t3PkHzVTvPA8qRxKe9TIkQ",
+        "real_stars": 4.0,
+        "pred_stars": 4.0,
+        "real_review": "I had a fantastic experience at Booker's Restaurant and Bar. The ambiance is elegant and comfortable, with a romantic and trendy vibe that suits both casual and special occasions. The service was top-notch\u2014attentive without being intrusive, and the staff was very accommodating. I particularly enjoyed the outdoor seating, which was a pleasant surprise. The food was delicious, with well-executed dishes like the chicken and waffles and the shrimp and grits. While the portion sizes could be a bit larger, the quality and flavor more than make up for it. I highly recommend Booker's for a memorable dining experience.",
+        "pred_review": "Booker's was a pleasant surprise. The atmosphere is definitely a highlight \u2013 it feels elegant yet comfortable, making it a nice spot for a meal or drinks. The menu offered a good variety without being overwhelming, and the food itself was quite good. It seems like a great place for groups, and they accept credit cards which is always convenient. The noise level was average, which is fine. The only minor thing is no WiFi, but it wasn't a dealbreaker for me. Overall, a solid choice."
+    },
+    {
+        "task_id": 14,
+        "user_id": "PpCc7-9dC5PKfXenSvgixQ",
+        "item_id": "nA4by92WDrSbxooQOe5rMQ",
+        "real_stars": 5.0,
+        "pred_stars": 5.0,
+        "real_review": "East Falls Beverage is a fantastic spot for beer and wine enthusiasts. The staff, particularly the owner John, are incredibly friendly and knowledgeable, making the shopping experience both enjoyable and informative. The store offers a wide and diverse selection of beers, including craft brews and imports, which is perfect for someone looking to try new things. The products are always fresh and cold, and the community feel adds a welcoming touch. While parking can be a bit challenging, the overall experience more than makes up for it. Highly recommended!",
+        "pred_review": "Finally checked out East Falls Beverage and I'm really glad I did. The new management has done a fantastic job \u2013 the selection of variety packs is excellent, and it's great to find them icy cold. Prices are reasonable, and the staff was very friendly and helpful. Definitely one of the better beverage distributors around."
+    },
+    {
+        "task_id": 15,
+        "user_id": "UId9V4QgwTdn3XDkeD2xKA",
+        "item_id": "Mha77MN_BYGB-w7DONZ5YA",
+        "real_stars": 4.0,
+        "pred_stars": 5.0,
+        "real_review": "Cuenelli's Peruvian Restaurant is a pleasant surprise, offering healthy and delicious food in a casual, welcoming atmosphere. The rotisserie chicken is moist and flavorful, and the sides like cilantro rice are a perfect complement. The staff is friendly and attentive, making the dining experience enjoyable. While it's not a food truck, the quality and taste of the food align well with my preferences. The only minor downside is that the chicken can occasionally be a bit dry, but overall, it's a great place to visit for a satisfying meal.",
+        "pred_review": "Just tried Cuenelli's and it was fantastic! The Peruvian rotisserie chicken (Pollo a la Brasa) was absolutely delicious \u2013 perfectly cooked and seasoned. It's a great casual spot, super affordable, and perfect if you're looking for a tasty meal that won't break the bank. Plus, they have a parking lot which is always a bonus. Definitely recommend for a casual dinner or takeout!"
+    },
+    {
+        "task_id": 16,
+        "user_id": "-q8QTgZ8UKIgFKnI8A-seA",
+        "item_id": "ijrWM-bKfFfqbnkvT1MYMQ",
+        "real_stars": 4.0,
+        "pred_stars": 4.0,
+        "real_review": "\"I visited El Rincon Latino and was pleased with the overall experience. The food was delicious and authentic, especially the mofongo and chicharr\u00f3n, which were both well-prepared and full of flavor. The prices were reasonable, and the portions were generous. The staff was friendly and attentive, making me feel welcome. However, I did notice some inconsistencies in service, which could be improved. Despite this, I would recommend this place for its excellent Latin American cuisine and welcoming atmosphere.\"",
+        "pred_review": "Came across El Rincon Latino, it's a little spot in a strip mall, pretty unassuming. Decided to try some of their Latin American food. I had a Dominican dish and it was really flavorful and hit the spot. Prices were good, and it's nice they offer takeout. Definitely a solid choice if you're looking for some authentic food."
+    },
+    {
+        "task_id": 17,
+        "user_id": "7GcuC5_UL2PBjTqRRYbNhw",
+        "item_id": "sWhPGcyYJoOTAabh2NjbRA",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "Kwality Fusion offers a unique fusion of Pakistani and Indian cuisines, which I found to be quite interesting. The food was generally well-prepared and flavorful, and the takeout and delivery options were convenient. However, the service could use some improvement. The staff seemed a bit overwhelmed during peak hours, and the wait times were longer than expected. While I appreciate the effort put into the food, the overall experience didn't quite meet my high standards for exceptional service. I would recommend this place for those looking to try something different, but it might not be the best choice if you're in a hurry or expecting top-notch service.",
+        "pred_review": "Stopped by Kwality Fusion for the Indian buffet. The vegetarian selection was pretty good, and the food itself was decent enough. Nothing really stood out as amazing, but it wasn't bad either. The staff were friendly. Finding parking was a bit of a pain since there's no lot or street parking directly available. It's an okay spot if you're in the mood for a quick Indian meal, but don't expect anything fancy."
+    },
+    {
+        "task_id": 18,
+        "user_id": "sJKPdJqoR7wP8cj-utik1A",
+        "item_id": "4-TKASCNK5-XBWdXmeXWbA",
+        "real_stars": 2.0,
+        "pred_stars": 2.0,
+        "real_review": "I visited Wawa at 1300 Chestnut St in Philadelphia and had a mixed experience. The store is clean and modern, and the variety of food and drink options is impressive. The food quality, especially the sandwiches and coffee, is good. However, the service was a significant letdown. The staff was often inattentive, and the wait times were excessively long, especially during peak hours. The store also appeared disorganized, with out-of-stock items and messy counters. While the affordable prices and free WiFi are nice, the poor service and long wait times make it difficult to recommend this location.",
+        "pred_review": "I'm usually a big fan of Wawa, but this location really missed the mark. I waited an incredibly long time for my order, and when I finally got it, it was completely wrong. The staff seemed pretty overwhelmed and weren't very friendly, which made the whole experience even more frustrating. It's a convenient spot if you're in the area, but the service definitely needs a lot of improvement. Not the typical Wawa quality I've come to expect."
+    },
+    {
+        "task_id": 19,
+        "user_id": "LY1fw6YZ6jgA8xcPVIZRPw",
+        "item_id": "yvpwN5321mM3x8G2ZiEZmw",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "I visited Little Istanbul and found it to be a mixed experience. The Turkish cuisine, particularly the lamb and chicken gyros, was quite flavorful and satisfying, which aligns with my appreciation for high-quality and well-executed dishes. However, the service was somewhat inconsistent; while some staff were friendly, others seemed less attentive. The atmosphere was cozy and welcoming, but the portions were on the smaller side for the price, which I found a bit disappointing. Overall, it's a decent spot, but not quite the standout experience I was hoping for.",
+        "pred_review": "Little Istanbul has a nice, classy atmosphere, which was a pleasant surprise. The service was generally good and attentive. I tried one of their gyros, and it was decent, but honestly, I was expecting a bit more. It felt a little dry in places, and I didn't quite get that authentic Turkish flavor I was hoping for. It's an okay spot if you're looking for something quick, but it didn't really stand out for me."
+    },
+    {
+        "task_id": 20,
+        "user_id": "w_ScPR6QVQKgI3njSdC7KQ",
+        "item_id": "UMLpPE8Ut-VQPRohqm1HFQ",
+        "real_stars": 3.0,
+        "pred_stars": 3.5,
+        "real_review": "The Flycatcher has a lot to offer, especially for a casual night out in Tucson. The atmosphere is cool and laid-back, with a nice outdoor patio that adds to the experience. The staff is generally friendly and attentive, and the drink prices are quite reasonable, which is a plus. However, the layout can be a bit challenging during busy events, and the karaoke DJ has been a hit-or-miss experience. While the bar has a lot of potential, these minor issues keep it from being a top pick for me.",
+        "pred_review": "I stopped by The Flycatcher looking for a casual spot with some live music, and it definitely delivered on that front. The outdoor seating was a nice touch, and it was cool to catch some live tunes. The bar staff were genuinely great \u2013 super quick with service and helpful when I asked for drink recommendations. My main hang-up was the overall atmosphere. It felt very much like a regulars' bar, and as someone new, I definitely got the impression that I wasn't really part of the crowd. It wasn't overtly hosti"
+    },
+    {
+        "task_id": 21,
+        "user_id": "uMKWYISQKvlbKyy22RG3wg",
+        "item_id": "jwRB-z8DeRmyIaWBcYcJMw",
+        "real_stars": 2.0,
+        "pred_stars": 2.0,
+        "real_review": "I visited Great Clips Encore Commons for a haircut and was disappointed with the overall experience. The staff was friendly, and the service was quick, which are positives. However, the quality of the haircut was poor, and it was uneven, requiring me to fix it myself. This is a significant issue, especially when I expect a professional and consistent service. The salon also had some issues with the online check-in system, leading to a bit of confusion and a longer wait than expected. While the price was reasonable, the quality did not match my expectations, making it a less favorable experience overall.",
+        "pred_review": "Decided to give this Great Clips a try since I was in the area and needed a quick trim. It's convenient that you can just walk in without an appointment, and the price is definitely on the lower end. However, the haircut itself was pretty disappointing. My bangs still feel a bit uneven, and it wasn't really what I was hoping for. I've had better experiences at other Great Clips locations, but this one just didn't quite hit the mark."
+    },
+    {
+        "task_id": 22,
+        "user_id": "BvBhLkZNlIYFtgaiZ-BfeQ",
+        "item_id": "tkW6eLIT26-0lMCByw1OGw",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "Marios Trattoria And Bar has a lot to offer, especially for those who appreciate authentic Italian cuisine. The food quality is generally high, and the pizza is a standout, often praised by other reviewers. However, the service can be inconsistent, with some visits being more positive than others. While the atmosphere is clean and welcoming, it might not be as romantic or upscale as one might hope for a special occasion. The prices are a bit on the higher side, and the portions could be more generous. Overall, it's a decent choice for Italian food, but it doesn't quite hit all the marks that I value most in a dining experience.",
+        "pred_review": "Marios Trattoria has some definite potential, but my visit left me with mixed feelings. I'd heard good things about their pizza, and it really did deliver \u2013 a nice New York-style crust that was quite satisfying. We also tried one of the specials, which was well-prepared and tasty. The casual atmosphere and quiet noise level made for a pleasant setting, and finding parking in the lot was a breeze. However, the service was a noticeable drawback. It felt a bit inattentive at times, and we had to wait longer th"
+    },
+    {
+        "task_id": 23,
+        "user_id": "5PBvxl5YzLPVni9AI8qsuA",
+        "item_id": "L7nW6sGXi3J6MeB9Vg4jVw",
+        "real_stars": 1.0,
+        "pred_stars": 1.0,
+        "real_review": "I visited Pottery Barn with high hopes, but my experience was a major letdown. The store itself is beautiful, with high-quality and stylish products, but the customer service was abysmal. I was ignored for long periods, and when I did get assistance, the staff seemed disinterested and unhelpful. Additionally, I heard from other customers about significant delivery delays and issues with orders. Given my past experiences with poor service and inefficiency, Pottery Barn fails to meet even the most basic standards. I would not recommend this store.",
+        "pred_review": "Another overpriced store with absolutely no customer service. Walked around for a good 15 minutes, looking for something, anything, and not one of the staff members even bothered to make eye contact, let alone ask if I needed help. What's the point of having a \"look\" if you can't even get basic assistance? Just another place trying to sell mediocre stuff at premium prices. Don't waste your time."
+    },
+    {
+        "task_id": 24,
+        "user_id": "xbUdF2XmnFwOWEsNSpabyA",
+        "item_id": "J-ciDDEdIHMcChGIyKZnOg",
+        "real_stars": 4.0,
+        "pred_stars": 4.0,
+        "real_review": "Cake Life Bake Shop is a charming and artistic bakery with a lot to offer. The baked goods, especially the cupcakes and pastries, are truly delicious and made with high-quality ingredients. The atmosphere is clean and welcoming, and the staff is generally friendly and helpful. However, the prices are a bit on the higher side, which might be a drawback for some. Despite this, it's a great spot for special occasions and those looking for unique and creative flavors. The lack of a happy hour and the occasional limited selection are minor downsides, but overall, it's a solid choice for a treat.",
+        "pred_review": "First visit to Cake Life Bake Shop and it was a great experience. The shop is really beautiful and clean, with an awesome display of all their cakes and pastries. I grabbed a cupcake and it was fantastic \u2013 definitely lived up to the hype. It's a welcoming spot in Fishtown. Good for a quick treat or if you need something special."
+    },
+    {
+        "task_id": 25,
+        "user_id": "wKvc5-MBjo5-GQqPnbG8Lw",
+        "item_id": "Unw031KzD4WIWWKve0-Jxw",
+        "real_stars": 3.0,
+        "pred_stars": 1.0,
+        "real_review": "\"Julio's Mufflers provides a solid mix of friendly and knowledgeable service, which is a breath of fresh air in the automotive repair industry. The staff, especially Julio, are honest and transparent, ensuring you only pay for the repairs you actually need. While the service is fast and efficient, the cash-only policy and limited scope of repairs are minor inconveniences. Overall, a reliable and trustworthy option for your muffler needs.\"",
+        "pred_review": "Came here for a muffler issue, thinking they specialized in mufflers. What a joke. They wouldn't even touch the catalytic converter screws, saying it wasn't their job. Seriously? It's part of the exhaust system! Complete waste of my time and gas. And to top it all off, they don't even take credit cards. Had to scramble for cash. No sign out front either, so it was hard to find. Absolutely ridiculous service. Never again."
+    },
+    {
+        "task_id": 26,
+        "user_id": "STB-P06LzXIzLj5feAIihA",
+        "item_id": "Tdb_Nd4EQar9sXE-a8SPSA",
+        "real_stars": 3.0,
+        "pred_stars": 1.0,
+        "real_review": "I visited Gail's Caribbean & American Cuisine with high hopes after reading the positive reviews. The food, especially the doubles, was indeed fresh and flavorful, which was a pleasant surprise. The service was generally friendly, and the casual atmosphere was comfortable. However, I did notice some inconsistencies in the food quality, particularly with the curry chicken, which was a bit undercooked and lacked flavor. Additionally, the seating area could use a bit more attention to cleanliness. Overall, it was a decent experience, but there's room for improvement in both food consistency and cleanliness.",
+        "pred_review": "Came here for some Caribbean food. The curry chicken was completely flavorless and looked undercooked. Definitely not what I was expecting."
+    },
+    {
+        "task_id": 27,
+        "user_id": "mjc1_oPVdI1zo7ucgzyc5Q",
+        "item_id": "vdv_HaU7ZIID12KB9mG9Vw",
+        "real_stars": 3.0,
+        "pred_stars": 2.5,
+        "real_review": "Vale Food Co is a decent spot for a quick, healthy meal. The family-friendly atmosphere and affordable prices are a plus, making it a good choice for those with kids. The food is generally fresh, with a variety of options like acai bowls and poke bowls. However, the service can be slow, and there have been instances of inconsistent portion sizes and availability of menu items. While the overall experience is satisfactory, there's definitely room for improvement in terms of service and consistency.",
+        "pred_review": "I've been wanting to try Vale Food Co for a while, and finally stopped by. The idea of fresh, healthy bowls is appealing, and I appreciate that they have outdoor seating. However, my experience was pretty underwhelming. The portion size was surprisingly small, especially considering the price. It felt like I was getting half of what I expected, which is frustrating. The service was also a bit disjointed and not very attentive. While some of the ingredients seemed fresh, the overall value just wasn't there f"
+    },
+    {
+        "task_id": 28,
+        "user_id": "5k0yMdidXDS3fSVpgV26_w",
+        "item_id": "H3PBFYqsgtA_EZr5WgroeA",
+        "real_stars": 3.0,
+        "pred_stars": 5.0,
+        "real_review": "I visited Modern Vac & Sew Centers for some alterations and was pleased with the quality of the work. The staff was knowledgeable and the pricing was reasonable. However, the turnaround time was a bit longer than I expected, which was a minor inconvenience. Overall, it's a decent place for sewing and appliance repairs, but there's room for improvement in terms of communication and speed.",
+        "pred_review": "I had such a wonderful experience at Modern Vac & Sew Centers! I needed a repair on my sewing machine and they were incredibly knowledgeable and friendly. They fixed it up perfectly and I really appreciated their excellent customer care. It's so great to find a place that truly knows their stuff. Highly recommend them for any sewing machine service!"
+    },
+    {
+        "task_id": 29,
+        "user_id": "sEwiNGNuMBxH2DV-4EDymw",
+        "item_id": "GB1Bmqd-Ymw37wv3UePOCA",
+        "real_stars": 2.0,
+        "pred_stars": 1.0,
+        "real_review": "The US Post Office on Grays Ferry Ave has a few bright spots, such as the helpful and efficient service from specific employees like Bill and the tattooed worker. However, the overall experience is marred by frequent service issues, such as lost packages and poor communication. The facility is also quite dirty and poorly maintained, which is a significant letdown. While the location and parking are convenient, the long wait times and unfriendly staff, especially the female employees, make it difficult to recommend this post office.",
+        "pred_review": "I really try to give places a fair shot, but this US Post Office location is just consistently disappointing. The staff at the counter are often surly and unhelpful, which makes even a simple task feel like a chore. I've heard too many stories about lost packages and poor service, and while I haven't had a package go missing myself, the general atmosphere and lack of care from the employees makes me believe it. It's a shame, because you expect a basic service like a post office to at least be efficient and "
+    },
+    {
+        "task_id": 30,
+        "user_id": "NQODFbxMdI6YXy2MVTM-4Q",
+        "item_id": "lySRYMCeVCacAeiEL65iBg",
+        "real_stars": 2.0,
+        "pred_stars": 5.0,
+        "real_review": "Club Vapor offers a unique vaping experience and is affordable, which are positive aspects. However, as someone who values outdoor activities, family-friendly environments, and unique, engaging experiences, this vape shop did not meet my expectations. The atmosphere and services are more suited for a specific audience and do not cater to my preferences for recreational and family-oriented activities. While the staff seemed friendly, the overall environment was not what I was looking for.",
+        "pred_review": "Just stopped by Club Vapor and I'm so glad I did! The staff here is incredibly friendly and super knowledgeable, which always makes for a great experience. I was really impressed that they make their juices to order \u2013 that's a unique touch I haven't seen before and it's fantastic. They have such a huge variety of flavors, it was hard to choose! The shop is also really clean and well-kept, and the prices are very reasonable. Definitely my new go-to spot for vape supplies. Highly recommend checking them out!"
+    },
+    {
+        "task_id": 31,
+        "user_id": "zn23grdBC9wQ9ZXjyzJEEw",
+        "item_id": "qHCfhWPyb1GXpzq9Wk3Vkg",
+        "real_stars": 3.0,
+        "pred_stars": 4.0,
+        "real_review": "Visited New England Pizza recently and had a mixed experience. The food was quite good, especially the Jamaican and Canadian pizzas, which were delicious and well-prepared. The prices are reasonable, and the portions are generous, which is a plus. However, the wait time was a bit long, and the service was inconsistent. Some staff members were friendly and efficient, while others seemed less attentive. Overall, it's a decent place to grab a bite, but there's room for improvement in terms of service and wait times.",
+        "pred_review": "New England Pizza is a pretty good spot. I've heard good things about their pizza and wings, and they definitely delivered. The staff was friendly, and it's a nice casual place if you want to dine in, or you can just grab takeout. Good for groups and families too. Prices are reasonable."
+    },
+    {
+        "task_id": 32,
+        "user_id": "wDVy-AjU-feA40GF1RtwXw",
+        "item_id": "fixjFaCYK2yDz5F-L2ASeg",
+        "real_stars": 2.0,
+        "pred_stars": 2.5,
+        "real_review": "Muscle Maker Grill has a clean and modern environment, which is a plus, and the staff is generally friendly. However, the food quality is hit or miss\u2014some dishes are bland and overcooked, and the prices are a bit steep for what you get. Additionally, the service can be inconsistent, with long wait times and incorrect orders. While it's a good spot for a healthy meal, it doesn't quite meet my expectations for a relaxed and enjoyable dining experience.",
+        "pred_review": "Decided to check out Muscle Maker Grill for the first time. Honestly, it wasn't the best experience. Walked in and the cashier was pretty engrossed in her phone, so no real greeting or help figuring out the menu. It's a casual place, which is fine, but a little more attention to customers would go a long way. The food itself was okay, I had a wrap that was decent enough, but nothing that really stood out or made me think I need to come back regularly. It felt pretty average overall, especially considering t"
+    },
+    {
+        "task_id": 33,
+        "user_id": "GDRHJp-xDsBw-1LK1VBdZw",
+        "item_id": "Fkf9r6xz0u4mxNB54O7PDw",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "I visited Eliz Mexican Restaurant & American Breakfast for a casual lunch, and while the experience was decent, it didn't quite hit the mark for me. The food was good, with fresh and flavorful Mexican dishes that stood out, especially the tacos. The service was friendly and attentive, which is always a plus. However, the decor felt a bit industrial and not very inviting, and there were a few issues with the cleanliness that detracted from the overall experience. The value for money was reasonable, but I've had better Mexican food in more pleasant settings. Overall, it's a decent spot, but not a place I'd return to frequently.",
+        "pred_review": "Stopped by Eliz for a casual breakfast the other morning. The place has a pretty laid-back, casual vibe, just like you'd expect, and there's a decent parking lot out back which is always a plus. They had the TV on, which is fine. I went for the breakfast combo, eggs and pancakes. The pancakes were surprisingly good, and honestly, the price for the whole meal was really hard to beat. It's definitely a good spot if you're looking for a cheap, no-frills breakfast that fills you up. However, I did hear some fol"
+    },
+    {
+        "task_id": 34,
+        "user_id": "pd8nCjLEvHBhx5t4xfclUg",
+        "item_id": "iuv_kT2zc_-4KFdUPFd9Xg",
+        "real_stars": 2.0,
+        "pred_stars": 3.5,
+        "real_review": "I visited Michaels in Tucson and, while it had a few positive aspects, it fell short in several areas that are important to me. The store layout was cluttered and disorganized, making it difficult to find items, which is a big letdown for someone who appreciates unique and well-curated shopping experiences. The staff were generally helpful, but the long wait times at the checkout were frustrating, and the cleanliness of the store, particularly the restrooms, was disappointing. While I found some unique items, the overall experience didn't meet my expectations for a quirky and enjoyable shopping trip.",
+        "pred_review": "I usually have such wonderful experiences, so I was a bit surprised by a few things at this Michaels. On the positive side, the staff were genuinely helpful when I was looking for items, and I always appreciate being able to use digital coupons \u2013 that's a huge plus! However, I did find the restroom situation a bit inconvenient, having to ask for it to be unlocked. I also hope they can keep a closer eye on the freshness of their products; it's important for craft supplies to be in good condition. With a litt"
+    },
+    {
+        "task_id": 35,
+        "user_id": "d2SmmiFbMXUxT5-cTzu0OQ",
+        "item_id": "afJf3BGC-kZkrFR1CaWdww",
+        "real_stars": 3.0,
+        "pred_stars": 2.0,
+        "real_review": "London Heights British Pub has a lot going for it, with a fun and welcoming atmosphere that's perfect for a casual night out. The live music and multiple TVs for sports add to the pub's charm, making it a great spot for social gatherings. However, the food quality is hit-or-miss, with some dishes like the burgers being inconsistent. The service can also be slow at times, and the prices are a bit steep for the quality of food. Despite these drawbacks, the pub's overall vibe and friendly staff make it a decent choice, but it falls short of being a top pick for me.",
+        "pred_review": "Finally got around to London Heights. The 'British Pub' vibe is there, but that's about where the positives end. Tried the fish and chips, and it was incredibly disappointing \u2013 bland and greasy. My partner's burger wasn't much better. Service was passable, but nothing to write home about. And don't even get me started on parking; it's a mess. For a place with so much hype, the food quality is a real letdown. Won't be rushing back."
+    },
+    {
+        "task_id": 36,
+        "user_id": "MvezyusV-u39ch6sEC3Zkg",
+        "item_id": "V7PzZzhM8HAFX6sNmadNuA",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "I visited Taco Bus in Tampa and had a mixed experience. The food was quite tasty, especially the tacos and salsas, which were fresh and flavorful. The staff was friendly, and the place was clean, which is always a plus. However, the wait time was longer than expected, and the quality seemed a bit inconsistent, which was a letdown. The prices were reasonable, but the service could use some improvement. Overall, it's a decent spot for a quick, casual meal, but it doesn't quite meet my higher standards for reliability and consistency.",
+        "pred_review": "Taco Bus is a pretty standard spot for a quick and cheap Mexican meal. The prices are definitely a draw, making it easy to grab something without breaking the bank. I got a couple of tacos and they were decent enough for a casual lunch. It's nice that they have outdoor seating and plenty of parking in a lot. However, I've heard some mixed reviews, and my order wasn't perfectly hot, with the beans being a bit on the cold side. It's okay for what it is, but don't expect anything amazing or super consistent."
+    },
+    {
+        "task_id": 37,
+        "user_id": "4NFi8Gn5FcJCA_UzOCgITg",
+        "item_id": "JRgjDdPh-8t2jbxuDMuKqw",
+        "real_stars": 3.0,
+        "pred_stars": 4.5,
+        "real_review": "I visited Chipotle Mexican Grill for a quick lunch and had a mixed experience. The food was fresh and well-prepared, which I appreciated, especially the burrito bowl with sofritas. The staff was generally friendly and efficient, but the service could be more attentive. The casual, clean environment was welcoming, but it lacked the festive atmosphere and drink options I typically enjoy. Overall, it was a decent meal, but it didn't quite meet my higher standards for dining out.",
+        "pred_review": "Chipotle is always a reliable spot for a quick and tasty lunch! I love how casual it is, perfect for grabbing a bite with friends or even the family. The staff was efficient and friendly, getting my order ready quickly even during a busy time. Everything tasted fresh, and I appreciate being able to customize my bowl exactly how I like it. Definitely a good option when you're looking for something fast and satisfying."
+    },
+    {
+        "task_id": 38,
+        "user_id": "rK1ALZgQGizqIlxLwh25Gg",
+        "item_id": "sl2O37Ei0v3PbM9x20Pg_A",
+        "real_stars": 5.0,
+        "pred_stars": 2.0,
+        "real_review": "I had a fantastic experience with JJM Plumbing. John, the plumber, was highly professional, punctual, and respectful. He arrived on time, communicated effectively, and did a meticulous job with my plumbing repairs. What stood out the most was the fair pricing and honesty\u2014no hidden fees or exorbitant charges. The customer service was exceptional, and I felt confident and comfortable throughout the process. I highly recommend JJM Plumbing for any plumbing needs.",
+        "pred_review": "Called JJM Plumbing for a water heater issue. They were prompt, I'll give them that. The work was completed, but it felt a bit overpriced for the job, and I wasn't particularly impressed. It's just plumbing. Not sure why everyone else is raving about it."
+    },
+    {
+        "task_id": 39,
+        "user_id": "BsbIvf1W0kpMdIt2GeuNig",
+        "item_id": "wJmyu7W1K9A_gE8Ed4Bc9w",
+        "real_stars": 4.0,
+        "pred_stars": 5.0,
+        "real_review": "Trident Grill is a fantastic spot for some delicious American and seafood dishes. The mac and cheese and fish and chips were both outstanding, and the appetizers like fried pickles and hummus were fresh and satisfying. The staff was generally friendly and attentive, making the dining experience enjoyable. The atmosphere is cozy and perfect for watching sports, and the prices are reasonable, especially during happy hour. While there were a few instances of slow service, the overall experience was very positive, and I would definitely recommend this place to anyone looking for a great meal in Tucson.",
+        "pred_review": "Came to Trident Grill with a few friends for a casual evening and was really impressed! From the outside, you might not expect it, but inside it's a fantastic sports bar with TVs everywhere and a huge bar with tons of drink options. Our server was excellent \u2013 super friendly and attentive, making sure we had everything we needed. We tried a couple of their appetizers, and they were all delicious. It's definitely a great spot for groups, and the casual atmosphere is perfect. Plus, they have a parking lot and "
+    },
+    {
+        "task_id": 40,
+        "user_id": "IKk8fBaYTewgVoCCzheV0g",
+        "item_id": "j2AhQF5-dYGyJFbQd5t4aA",
+        "real_stars": 3.5,
+        "pred_stars": 3.0,
+        "real_review": "I visited the Singapore Chinese Vegetarian Restaurant and found it to be a mixed experience. The food was delicious, especially the dim sum and General Tso's chicken, and the prices were very reasonable, which I appreciated. The staff was friendly and accommodating, which made the visit enjoyable. However, the food was a bit greasier than I prefer, and the decor was somewhat dated, which detracted from the overall experience. Despite these minor issues, I would still recommend this place for its tasty vegetarian options and good service.",
+        "pred_review": "Came here looking for a vegetarian Chinese option. They definitely have a wide selection of mock meat and all-veggie dishes, which is great for variety. The food itself was decent, pretty standard fare for this type of place, and the prices were fair. It's a casual spot, nothing fancy, and the noise level was quiet enough for conversation. While it's not going to blow you away, it's a solid choice if you're in the area and looking for an affordable, basic vegetarian meal."
+    },
+    {
+        "task_id": 41,
+        "user_id": "vHn4yfazy3GGzLZGRmt4mQ",
+        "item_id": "aVxN4BthCaIt_LP1_w0STg",
+        "real_stars": 4.0,
+        "pred_stars": 4.5,
+        "real_review": "I visited Resale Ranch and was thoroughly impressed. The owners, Jodi and Troy, provided exceptional customer service, making the shopping experience both enjoyable and stress-free. The store's unique and varied inventory, including vintage furniture and collectibles, was a delightful surprise. The prices were fair, and the atmosphere was warm and welcoming. While the store is not very large, it has a well-curated selection that makes every visit interesting. I highly recommend Resale Ranch for anyone looking for unique and high-quality vintage items.",
+        "pred_review": "I finally made it over to Resale Ranch today and it's a really charming spot. It's not a massive store, but it's packed with all sorts of interesting antiques and unique items, especially on the front porch area. You can tell a lot of care goes into curating the merchandise. Jodi, the owner, was incredibly welcoming and knowledgeable, which always makes a difference. It's clear she loves what she does. It's nice to have a dedicated parking lot, and they accept credit cards, which is convenient. Definitely w"
+    },
+    {
+        "task_id": 42,
+        "user_id": "Ejcb-sIMc-1vgo4xM2FBfg",
+        "item_id": "YKQc1IpoaBfIEyMQCisZ6Q",
+        "real_stars": 4.0,
+        "pred_stars": 3.5,
+        "real_review": "MaFooCo is a delightful food truck that offers a unique blend of Korean and Mexican cuisines. The food was excellent, with a variety of dishes that catered to different tastes. I particularly enjoyed the outdoor seating, which provided a casual and relaxed atmosphere. The service was quick and friendly, and the price was very reasonable. While it doesn't have a romantic or upscale ambiance, it's a great spot for a casual dinner or a fun night out with friends. Highly recommended!",
+        "pred_review": "Finally got around to trying MaFooCo! I've heard a lot about their Korean-Mexican fusion, and I was curious to see what the hype was about. I went for the kimchi quesadilla, and it was definitely an interesting combo. The kimchi had a surprising sweetness to it that actually worked pretty well with the cheese. It's not what you'd call traditional Korean or Mexican, but it's a tasty twist if you're open to something different. The food truck was pretty busy when I went, so there was a bit of a wait for the f"
+    },
+    {
+        "task_id": 43,
+        "user_id": "puzJObp42yQIfb3gYIj3hQ",
+        "item_id": "Hk_EjFDeK5u7rlYEUx6a_g",
+        "real_stars": 3.0,
+        "pred_stars": 3.0,
+        "real_review": "Jaggie's Restaurant offers a mix of experiences that both align and conflict with my preferences. On the positive side, the food is praised for its authenticity and flavor, especially dishes like curry goat and ackee and saltfish, which are highly appreciated by those familiar with Jamaican cuisine. The reasonable prices and generous portion sizes are also a plus. However, the restaurant's basic, no-frills setting and the mixed reviews regarding the taste of the food (some finding it bland) are concerning. While the quick and friendly service is a good sign, the lack of a memorable ambiance and the polarized opinions on food quality make it a bit of a gamble. Overall, it's a decent spot for authentic Caribbean food, but it might not fully meet my high standards for both food quality and service.",
+        "pred_review": "I decided to try Jaggie's for some Caribbean food. The prices are definitely reasonable, and you get a good amount of food for what you pay, which is a plus. Delivery was also pretty quick. However, I found the food itself to be quite bland. It really lacked the vibrant flavors I expect from Caribbean cuisine. It wasn't bad, but it wasn't particularly memorable either. If they could amp up the seasoning, it would be a much better experience."
+    },
+    {
+        "task_id": 44,
+        "user_id": "WJ5wpZkqUyPOzFuro46iww",
+        "item_id": "tJH6fNXoMkgWRyN_Y76eZg",
+        "real_stars": 4.0,
+        "pred_stars": 3.5,
+        "real_review": "New China Court offers a pleasant dining experience with friendly and efficient service, which is a significant plus for me. The food quality is generally good, with standout dishes like the egg rolls and General Tso's chicken. The prices are reasonable, and the portions are generous, making it a good value for money. However, the restaurant can be a bit greasy and dingy, and it gets uncomfortably hot during the summer, which are minor drawbacks. Overall, it's a solid choice for a Chinese meal, and I would recommend it to others.",
+        "pred_review": "Stopped by New China Court for a quick takeout dinner. This place definitely fits the bill for a no-frills, budget-friendly Chinese spot. The food itself was pretty standard takeout fare \u2013 that familiar mix of savory and a bit greasy that hits the spot when you're craving it. I appreciated the open kitchen setup; it felt clean and you could see them preparing dishes. While some items were quite good, it feels like you might need to be selective with your order here. It's a solid option for a casual Chinese "
+    },
+    {
+        "task_id": 45,
+        "user_id": "VgE2QkDTbDzD0R4NOUBv-A",
+        "item_id": "pX79hg6t0WsaCzU2npdK5w",
+        "real_stars": 3.0,
+        "pred_stars": 3.5,
+        "real_review": "I visited Rai Rai Ramen based on recommendations and had a mixed experience. The ramen, especially the miso and shoyu, was delicious and rich, which was a highlight. The staff was friendly and attentive, and the atmosphere was clean and modern. However, the quality of some appetizers was disappointing, and the prices seemed a bit high for the overall experience. Despite these issues, it's a decent place for a good bowl of ramen.",
+        "pred_review": "Decided to give Rai Rai Ramen a try. The place itself is pretty clean and has a casual atmosphere, which is what you'd expect. Service was friendly and attentive, no issues there. As for the ramen, it was a bit of a mixed experience. The broth had some good flavor in parts, but it wasn't consistently rich or as deep as I've had at other spots. The noodles were okay, but some were a little on the mushy side, not quite the perfect chewiness I look for. The pork was decent, but could have been more tender. Ove"
+    },
+    {
+        "task_id": 46,
+        "user_id": "rq82qNDKZnVWO6smWEGkNQ",
+        "item_id": "ZLerfIo2cDSPXJ9K57WYxQ",
+        "real_stars": 4.0,
+        "pred_stars": 3.5,
+        "real_review": "Studio510 is a pleasant surprise in the beauty salon world. The atmosphere is warm and welcoming, and the staff, particularly Derek, are highly skilled and knowledgeable. I received a fantastic haircut and blowout, and the prices were reasonable. The only minor downsides were a slightly longer wait time and a bit of strong chemical fumes, but overall, the experience was excellent, and I would definitely return.",
+        "pred_review": "I decided to give Studio510 a try after hearing some positive buzz. It was easy enough to find parking in their lot, which is always a good start. My stylist was quite skilled, especially with highlights, and I was generally pleased with the color work. They definitely seem to know what they're doing when it comes to hair. The pricing was pretty standard for a salon of this type. While it was a good experience and I left satisfied, I wouldn't say it was an absolutely groundbreaking visit. It's a solid choic"
+    },
+    {
+        "task_id": 47,
+        "user_id": "Coie_PxO9Hzt6qBKxb-S9Q",
+        "item_id": "eqK66D5jQRO2eY1_MhAo_Q",
+        "real_stars": 5.0,
+        "pred_stars": 4.0,
+        "real_review": "\"Dan's Fresh Meats is a hidden gem in Philadelphia, and it's exactly the kind of place I love. The quality of the meats is top-notch, and the Italian hoagies are some of the best I've ever had. The staff, including Dan, are incredibly friendly and go out of their way to make sure every customer is satisfied. The prices are reasonable, and the old-school, neighborhood feel adds to the charm. Despite the occasional crowds, the personalized service and fresh ingredients make it well worth the visit. Highly recommended!\"",
+        "pred_review": "Decided to check out Dan's Fresh Meats after seeing some buzz. I grabbed one of their hoagies for takeout, and it was definitely a good call. Made fresh right there, and it hit the spot. The service was friendly and efficient, which is always a plus. Good to know they accept credit cards too. I'll have to go back and try that Italian sausage everyone talks about, as I'm always on the lookout for quality. Street parking was easy enough to find. A solid spot for a quick, tasty meal."
+    },
+    {
+        "task_id": 48,
+        "user_id": "zvFLlakt9gRTu9JxXVnRhw",
+        "item_id": "vPSRs9RRGbv4Y4nNWyw5Vw",
+        "real_stars": 2.0,
+        "pred_stars": 2.0,
+        "real_review": "I visited Goodness Fresh Food and Juice Bar with high hopes for a healthy and refreshing meal. The food was indeed delicious and fresh, especially the acai bowls and smoothies, which I thoroughly enjoyed. The atmosphere was clean and welcoming, and the outdoor seating was a plus. However, the customer service was a letdown. I experienced long wait times and a few minor errors with my order, which was frustrating. Additionally, the noise level was a bit high, making it difficult to have a relaxed dining experience. While the food quality is commendable, the service and ambiance issues prevent me from giving a higher rating. I would consider returning, but these aspects need improvement.",
+        "pred_review": "I decided to try Goodness Fresh Food and Juice Bar based on some recommendations, but I was really disappointed. My order was completely wrong, and when I tried to get it fixed, the customer service was just awful. It's a shame because the food *looked* good, but the whole experience was ruined by the lack of care from the staff. I won't be coming back."
+    },
+    {
+        "task_id": 49,
+        "user_id": "8cXjs8VbsYvOYblV-5oCvA",
+        "item_id": "3oxlWgUlq7gN7-qXhOpLpg",
+        "real_stars": 4.0,
+        "pred_stars": 4.0,
+        "real_review": "El Coqui Puerto Rican Restaurant is a delightful find, offering a cozy and clean atmosphere with a menu that truly stands out. The mofongo and pernil were especially delicious, and the friendly staff made the experience even better. While there were a few instances of slower service, the quality of the food and the overall ambiance more than made up for it. I highly recommend this place for anyone looking to enjoy authentic Puerto Rican cuisine.",
+        "pred_review": "What a delightful find! I've been wanting to try Puerto Rican food for a while, and El Coqui was a wonderful introduction. The name \"El Coqui\" itself is so charming, and the restaurant has a lovely, authentic feel. I tried some of their signature dishes, and everything was absolutely delicious \u2013 so flavorful and comforting. It's clear they put a lot of love into their cooking. This is definitely a great spot for groups or families looking for a unique culinary experience. Just a friendly tip for anyone plan"
+    }
+]

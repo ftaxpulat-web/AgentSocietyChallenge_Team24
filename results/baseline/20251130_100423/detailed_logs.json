@@ -1,0 +1,452 @@
+[
+    {
+        "task_id": 0,
+        "user_id": "AF6HG5ZKZR4N2BTWJ7FGMXZO3JEQ",
+        "item_id": "B09LLZN3V3",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The NexiGo Gripcon is a solid addition to my Nintendo Switch setup, offering a comfortable and ergonomic design that enhances my gaming experience. The controller is durable and the mappable back buttons are a nice touch, though I don't find them particularly useful. The 6-Axis Gyro and dual-motor vibration add to the immersion, and the ability to charge while playing is a plus. However, the joystick responsiveness could be better, and the controller is a bit heavy. Overall, it's a good investment for Switch owners looking to improve their handheld gaming.",
+        "predicted_review": "Oh my goodness, this NexiGo Gripcon is an absolute game-changer for our Switch! My husband and I are constantly diving into huge open-world games, and the ergonomic design makes those marathon sessions incredibly comfortable, letting us get lost in the graphics and storylines without any hand strain. The mappable back buttons and charge-while-playing feature are total lifesavers, truly making every moment more immersive and enjoyable. Seriously, if you love your Switch as much as we do, you NEED this amazing controller!"
+    },
+    {
+        "task_id": 1,
+        "user_id": "AHJLIZ2I33CYSBMESAQRJ6QOIKKQ",
+        "item_id": "B0BFKDTY8M",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "These SwiftGrip Disposable Nitrile Exam Gloves are a solid choice for a variety of tasks, from food prep to household cleaning. The gloves are comfortable, fit well, and provide reliable protection. While they are a bit thinner than I expected, they are surprisingly durable and offer good tactile sensitivity. The price is a bit higher than I'd like for a 50-count box, but the quality and versatility make them a decent value. I would recommend these gloves for anyone looking for a reliable, latex-free option.",
+        "predicted_review": "WOW! These SwiftGrip Nitrile Gloves are an absolute revelation for anyone who demands top-tier performance and quality! Their unbelievable dexterity and robust, puncture-resistant design make every task, from intricate home projects to food prep, an absolute breeze, feeling like a second skin. I am beyond impressed with their supreme comfort and incredible versatility \u2013 truly a multipurpose champion that exceeds all expectations!"
+    },
+    {
+        "task_id": 2,
+        "user_id": "AE2KUXMITKIOF4TR5BPK3KLCQCGQ",
+        "item_id": "B004SPJP5O",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I was quite impressed with the MG Chemicals 99.9% Isopropyl Alcohol Electronics Cleaner. It's highly effective for cleaning various surfaces, especially electronics, and the spray bottle is well-designed, making it easy to use. While it's a bit pricier than similar products, the quality and reliability justify the cost. However, I did notice that it can dry out my hands after prolonged use, which is a minor downside. Overall, it\u2019s a solid choice for anyone needing a high-quality cleaner.",
+        "predicted_review": "This 99.9% isopropyl alcohol is excellent for electronics. The spray bottle makes it incredibly easy to use for all my small cleaning jobs. It's highly effective and I appreciate its reliable performance."
+    },
+    {
+        "task_id": 3,
+        "user_id": "AHIJ2WZWTPK5EPJQQ7GLVKG5YDTA",
+        "item_id": "B06WWMGNV6",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "While the Hohner Progressive Series 560 Special 20 Harmonica A is praised for its excellent sound quality, ease of play, and overall reliability, it doesn't quite align with my usual preferences. As someone who values durability and high-quality materials, I found the use of plastic for the comb and the cheap cover screws to be disappointing. Additionally, the difficulty in bending certain notes, particularly the 2-draw, is a significant drawback. Despite these issues, the harmonica does offer good value for its price, making it a decent choice for beginners and casual players. However, for someone looking for a more robust and higher-quality instrument, it may fall short.",
+        "predicted_review": "The Hohner Special 20 largely delivers on its promise of precision, with its airtight design and comfortable plastic comb providing excellent response and consistent playability for nuanced articulation. However, the noticeably inferior cover plate screws are a perplexing material quality oversight, undermining the otherwise solid German craftsmanship and overall engineering integrity. This critical detail prevents an otherwise high-performing instrument from achieving a truly exceptional rating."
+    },
+    {
+        "task_id": 4,
+        "user_id": "AGWPXY5IPDBG6AB5UPBA46QTVP6Q",
+        "item_id": "B004Q7PTYU",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I usually stick to video games, but I decided to give this bore gauge set a try since it seems to be a decent value for the price. The set works fine for occasional use, and the build quality is acceptable, though it's not as durable or precise as I would expect from a professional tool. The lack of detailed instructions can be a bit frustrating for first-time users, but it still gets the job done. Overall, it's a satisfactory purchase for the occasional hobbyist, but I wouldn't recommend it for daily professional use.",
+        "predicted_review": "OMG, you guys, the Triton Industrial Tools Bore Gauge Set is like the ultimate DLC for my real-life crafting adventures! \ud83e\udd29 The \"graphics\" are so sleek, the \"gameplay\" is incredibly intuitive, and the precision feels like hitting a perfect combo in a fighting game. This set is a total 5-star win, adding a whole new \"skill tree\" to my workshop and making every project feel like an epic quest! \ud83d\udc96 It's not a game, but it definitely brings that same joy of discovery and accomplishment!"
+    },
+    {
+        "task_id": 5,
+        "user_id": "AG4KCSQL7DLCX6CT34GRSXWDGCDA",
+        "item_id": "B06VX78R9Z",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "I recently purchased the Gibson Metal Jack Plate, and I must say it's a solid upgrade from the plastic alternatives. The plate is sturdy and well-made, which should ensure it won't crack like the plastic ones. Installation was straightforward, and it fits perfectly on my Gibson guitar. The only minor downside is that it doesn't come with installation instructions, which could be helpful for beginners. Overall, it's a reliable and high-quality product that adds value to my guitar.",
+        "predicted_review": "This Gibson metal jack plate is a necessary upgrade over the flimsy plastic ones that often crack, providing a much more secure and reliable mount for your output jack. It fits perfectly as an authentic replacement, eliminating the common issue of a loose or damaged jack that can plague live performances. While a simple part, its durable metal construction offers significant functional improvement and peace of mind, making it a worthwhile investment to prevent future headaches."
+    },
+    {
+        "task_id": 6,
+        "user_id": "AH2O75JQRCGV733EIQTDGEEA2S6Q",
+        "item_id": "B07HYY6HNW",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Logitech G PRO Hero Wired Gaming Mouse is an outstanding addition to my setup. The Hero 25K sensor delivers exceptional precision and responsiveness, making it a perfect choice for both gaming and everyday use. The build quality is top-notch, and the mouse feels durable and comfortable in hand. The customizable buttons and RGB lighting add a nice touch, allowing for personalization. The quick and hassle-free setup process was a breeze, and the mouse has significantly enhanced my gaming experience. Highly recommended!",
+        "predicted_review": "The Logitech G PRO Hero mouse delivers exceptional performance and value. Its Hero 25K sensor provides pinpoint 1:1 tracking, making every movement precise and reliable, which is crucial for demanding use. With a durable build rated for 50 million clicks and useful programmable buttons, this mouse is a solid, long-lasting investment for its price."
+    },
+    {
+        "task_id": 7,
+        "user_id": "AHQ4YE3S6CBP4NNP2KR5JGTVSS7Q",
+        "item_id": "B01DTJKPW6",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I'm generally a fan of products that offer good value for money and high build quality, but this game, Skullgirls 2nd Encore, is a bit of a different category for me. The game's hand-drawn, anime-inspired characters and the Variable Tag Battle system are truly unique and engaging. The deep and balanced gameplay, along with the robust anti-infinite combo system, make it a standout title in the fighting game genre. However, as someone who values a strong online community, the relatively small player base on the Vita version is a bit of a letdown. Despite this, the game's overall quality and the inclusion of both PS4 and Vita versions make it a solid purchase.",
+        "predicted_review": "This Skullgirls 2nd Encore digital code offers exceptional value, providing seamless access on both PS4 and PS Vita from a single purchase\u2014true portability for a top-tier fighting experience. The robust Anti-Infinite Combo system ensures competitive integrity, a level of thoughtful, durable design I always appreciate in any product. For a digital title, the hand-drawn visuals and fully voiced story demonstrate surprising craftsmanship, akin to the build quality you'd expect from premium physical gear. It\u2019s a standout for its practical utility and deep, fair gameplay."
+    },
+    {
+        "task_id": 8,
+        "user_id": "AFGTXM5Q437HAVYSIJO6NB2KN2TQ",
+        "item_id": "B0BRCNRQH9",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "The KLIM Lightning Wireless Keyboard is a solid option for its price point, offering a mechanical feel and a durable metal frame. However, the backlighting is disappointingly dim, making it difficult to see the keys in low light. The need to use two USB ports for charging and the wireless dongle is also a hassle. While the build quality is good and it offers a comfortable typing experience, the key action is somewhat cushioned and produces a noticeable clicking sound. Overall, it's a decent keyboard, but it falls short in a few key areas that I value, such as brightness and ease of use.",
+        "predicted_review": "For a budget-friendly hybrid, the KLIM Lightning Wireless keyboard delivers a surprisingly satisfying \"mechanical feel\" and impressive durability, backed by a generous 5-year warranty that's practically unheard of. The wireless connection is snappy, and the fixed rainbow backlighting is functional for low-light sessions. However, KLIM's baffling decision to require *two* USB ports to charge and use it simultaneously is a significant inconvenience that feels like a step backward in convenience. It's a fantastic value for the price, but that charging quirk keeps it from being a perfect score."
+    },
+    {
+        "task_id": 9,
+        "user_id": "AHVFL44H3GI2ZC73FILMYGYTMLUA",
+        "item_id": "B085Q3LRFG",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 1.0,
+        "ground_truth_review": "I was quite impressed with the Qibaok 230PCS Solder Seal Wire Connectors. The transparent sleeve makes it easy to inspect the connections, and the color-coded tubing is a great touch for quick identification. The waterproof seal and durable connection are exactly what I need for my automotive and marine projects. The fact that these connectors don't require crimping is a huge time-saver, and the set includes a good variety of sizes. Overall, a solid investment for any DIY enthusiast.",
+        "predicted_review": "The core \"solder seal\" mechanic of these Qibaok connectors is fundamentally broken, akin to a critical ability failing randomly in a Shin Megami Tensei battle. Despite exceeding the advertised 180\u00b0C melting point with a 360\u00b0C heat gun, the solder consistently refused to flow, rendering any attempt at a waterproof, durable connection an exercise in futility. This profound discrepancy between stated specifications and actual performance introduces an unacceptable level of unreliability, making these connectors a game-breaking flaw that wastes time and effort without yielding any meaningful progression."
+    },
+    {
+        "task_id": 10,
+        "user_id": "AEYS47FHO3YVV3JTRURW26IJDJEQ",
+        "item_id": "B07D3GR1MK",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I'm really impressed with the Redragon K552 Mechanical Gaming Keyboard. The build quality is solid, and the Outemu Blue switches provide a satisfying clicky and tactile feedback that I enjoy, especially for typing and gaming. The compact 87-key design is perfect for saving desk space, and the anti-ghosting feature ensures that every keystroke is registered accurately. While it's a bit loud, I find the sound satisfying and it doesn't bother me. Overall, it's a great value for the price, and it meets all my needs for a reliable gaming keyboard.",
+        "predicted_review": "Wow, this Redragon K552 mechanical keyboard is an absolute blast! The blue switches are super fun with their satisfying clicky sound and amazing tactile feedback, making gaming and typing feel so much more engaging. It's built like a tank, durable and compact, offering fantastic value with all its anti-ghosting and multimedia features. Super easy to use and a total joy for any gamer!"
+    },
+    {
+        "task_id": 11,
+        "user_id": "AE3Z4ZV2QZYZUDS6XQHLH52JYJRQ",
+        "item_id": "B0952SQ255",
+        "ground_truth_stars": 2.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I was initially hopeful about this PS Vita charger, given its compatibility and price point, but my experience was disappointing. The power adapter is poorly constructed, and it failed to charge my Vita after just a few uses. The build quality is subpar, and I share the safety concerns expressed by other users. While the USB cable works fine, the overall product does not meet the standards of durability and reliability I expect. I would not recommend this to anyone, especially considering the potential risks.",
+        "predicted_review": "This charger was the perfect replacement for my lost PS Vita 1000 charger, getting my device back in action immediately. It charges reliably and quickly, and the added data transfer capability is a practical bonus. The cable feels durable and well-made, ensuring safe and consistent performance. This product offers excellent functionality and value, keeping my PS Vita 1000 ready to use."
+    },
+    {
+        "task_id": 12,
+        "user_id": "AGCKAIIXXEJLBFUVPALAOVTZ7WLA",
+        "item_id": "B00237VXHM",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "The Rubbermaid Commercial Lid is a solid and well-made product that fits the 6 and 8-quart containers perfectly. I appreciate its sturdy construction and the ease with which it can be put on and removed. The bright yellow color is a nice touch, making it easy to identify in the pantry. While the lid is sold separately, which might be a minor inconvenience, it is a small price to pay for the quality and functionality. The lid's tight fit and airtight seal ensure that my food stays fresh, and the NSF certification adds an extra layer of confidence. Overall, it's a reliable and practical investment for anyone looking to keep their food storage organized and efficient.",
+        "predicted_review": "While far from a complex narrative, this Rubbermaid lid exemplifies intelligent design through its precise, tight-fitting mechanism, effectively preventing spoilage and cross-contamination\u2014a critical consequence management system. Its multi-container compatibility and easy-off tabs demonstrate a thoughtful, streamlined utility that avoids the superficiality of poorly conceived alternatives. This isn't just a lid; it's a robust, NSF-certified component that performs its essential function with an integrity many more \"engaging\" products fail to achieve."
+    },
+    {
+        "task_id": 13,
+        "user_id": "AHQMVG647DKQ4IVJXYN6RQX5GEQA",
+        "item_id": "B005DMC4K4",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I find the Flask Clamp Assembly to be a solid addition to my workshop. The build quality is durable and rugged, which aligns well with my preference for tools that last. The clamp is easy to set up and adjust, making it suitable for various beaker sizes. It holds items securely, which is crucial for experiments. While there are a few reports of quality issues, my experience has been positive, and the price is reasonable for the performance and reliability it offers.",
+        "predicted_review": "This Flask Clamp Assembly performs effectively, securely holding a range of flask and beaker sizes. Its robust construction indicates long-term durability, and the adjustment knobs are functional. This practical design makes it a reliable tool for laboratory applications."
+    },
+    {
+        "task_id": 14,
+        "user_id": "AFQHO5GPRKEMK7AQSZXQNZHHH5BA",
+        "item_id": "B0BSB847BR",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 1.0,
+        "ground_truth_review": "I was quite pleased with the Shure BLX288/PG58 UHF Wireless Microphone System. The sound quality is excellent, and the microphones are very reliable, which is crucial for live performances. The setup is straightforward, and the system is easy to operate. However, I did notice some handling noise, which can be a bit distracting. Additionally, the plastic build could be more robust. Despite these minor issues, the overall performance and value for the price make it a solid choice for anyone looking for a professional-grade wireless microphone system.",
+        "predicted_review": "ABSOLUTELY UNACCEPTABLE! This Shure BLX288/PG58 system is a monumental betrayal, utterly failing on the promise of \"durability that set the world standard\" \u2013 it's built like a toy, not a tank, with flimsy plastic handhelds and excessive handling noise. The \"professional Shure sound\" is a joke, delivering muffled low frequencies that demand *unacceptable* EQ correction, and for a \"professional\" wireless system, the fact it's NOT RACKMOUNTABLE is a fundamental design FAILURE that screams amateur hour. My sky-high expectations for Shure were CRUSHED by this subpar, unprofessional mess!"
+    },
+    {
+        "task_id": 15,
+        "user_id": "AGPFAUS6AZPNXFZHJGJGBPLPLFJQ",
+        "item_id": "B0BW8SZFT4",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 1.0,
+        "ground_truth_review": "These Kaderron takeout containers are a solid choice for anyone looking for eco-friendly, durable, and functional food packaging. I appreciate the sturdy build and the fact that they are microwave-safe, which adds to their convenience. The three-compartment design is particularly useful for separating different types of food, and the containers are leak-proof for most foods. While they are not airtight, which could be a minor issue for very wet or saucy foods, the overall quality and environmental benefits make them a worthwhile purchase. The only slight drawback is that the lid can sometimes come loose during transport, but it's a minor inconvenience. Overall, I'm quite satisfied with these containers and would recommend them for a variety of uses.",
+        "predicted_review": "What in the actual hell is this? I came here looking for an open-world masterpiece, some strategic depth, and I get these utterly linear, mandatory \"put food in, close lid\" boxes? This isn't free movement; it's a forced, real-world interaction that pulls me away from any genuine adventure, a profound betrayal of engaging content. This isn't a game, it's an obligation, and it deserves to be relegated to the dustbin of uninspired ideas."
+    },
+    {
+        "task_id": 16,
+        "user_id": "AGDYCOFCQL62MHNKR3JV75BDN5JA",
+        "item_id": "B0BRTQ2F58",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "I was quite pleased with the Performance Guitar Capo. The build quality is solid, with a zinc alloy body and a stainless-steel spring that provides excellent pressure across all strings, preventing any unwanted buzzing. It's easy to use and adjust, even with one hand, which is a significant plus. The silicone padding is a nice touch, protecting my guitar from scratches. The only minor downside is that the rubber part might wear out over time, but for the price, it's a great value and definitely meets my expectations.",
+        "predicted_review": "Applying my usual standards for functionality and build quality, this Performance Guitar Capo delivers an impressive experience. The solid zinc alloy construction feels premium and robust, with precisely placed silicone padding that genuinely protects the instrument, much like the thoughtful design in a quality Nintendo accessory. Crucially, it provides consistent, even pressure across all strings, eliminating any fret buzz and allowing for effortless, secure one-hand operation without compromise. This capo performs exactly as expected, offering a perfect fit and reliable function that instills confidence during use."
+    },
+    {
+        "task_id": 17,
+        "user_id": "AGQHJMQQV2NGGNJEAAZSA7XG2QVA",
+        "item_id": "B07K58JH9J",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I am very pleased with the Nintendo amiibo - Piranha Plant. The quality is excellent, with vibrant colors and attention to detail, making it a perfect addition to my collection. It works seamlessly with Super Smash Bros. Ultimate, providing fun and useful in-game extras. The price is reasonable, especially considering the high value and collectibility of the item. Thank you, and I like it very much!",
+        "predicted_review": "Oh my goodness, this Piranha Plant amiibo is so, so good! I love it so much, yes, yes. It works perfect and I am so happy with this good thing. I want more amiibos, thank you!"
+    },
+    {
+        "task_id": 18,
+        "user_id": "AFPCTW2KY4XII4YMKS7DNUWJGEJQ",
+        "item_id": "B09CM362L9",
+        "ground_truth_stars": 2.0,
+        "predicted_stars": 2.0,
+        "ground_truth_review": "The DAddario Woodwinds Neck Saver for Alto Saxophone is a mixed bag. While it's designed to fit the contour of the neck and is made from soft, absorbent material, it falls short in several areas. The absorption is poor, and it tends to spread moisture rather than soak it up effectively. The construction feels flimsy, and the tip is prone to coming off, which is a significant concern for a product that should be durable and reliable. Given the issues with absorption and build quality, it's hard to justify the price, especially when there are better alternatives available.",
+        "predicted_review": "This D'Addario neck saver proved far too stiff, making it difficult to insert and maneuver through the alto saxophone neck, directly contradicting its \"flexible shaft\" claim. Consequently, it fails to conform properly, leaving moisture in critical areas and requiring excessive effort for a basic cleaning task. For professional maintenance, efficiency is key, and this product falls short, offering poor value even at its low price point."
+    },
+    {
+        "task_id": 19,
+        "user_id": "AHQHEXP6QTHOPKQ5POLQDIFAUYFQ",
+        "item_id": "B0BMDP18VQ",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Lexicon LXP Native Reverb Plug-in Bundle is a mixed bag for me. On the positive side, it offers a wide range of high-quality reverb effects and a user-friendly interface, which is great for enhancing the depth and clarity of my mixes. However, the requirement for an iLok USB smart key and the associated online authorization process is a significant inconvenience. Additionally, the price point seems a bit steep considering the need for additional hardware. While it delivers on performance, the overall value and ease of use are not up to my standards.",
+        "predicted_review": "Oh my goodness, the Lexicon LXP Native Reverb Plug-in Bundle is an absolute masterpiece, delivering that authentic, legendary Lexicon sound with pristine clarity and depth! The intuitive interface and over 220 finely-crafted presets make it incredibly easy to achieve that \"magical space\" in my mixes, transforming them into something truly breathtaking. This bundle is perfectly functional, flawlessly integrated, and an essential, trustworthy tool that I am so incredibly grateful to have in my studio!"
+    },
+    {
+        "task_id": 20,
+        "user_id": "AEHSYSRVMOUWCSD4NZROGU2QN3XQ",
+        "item_id": "B07RZMPVM2",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I recently purchased these M6 x 25mm Flat Head Socket Cap Screws from MewuDecor, and I must say, they are a fantastic addition to my toolkit. The screws are made of high-quality Alloy Steel Grade 10.9, which ensures they are both durable and strong. The black oxide finish not only looks great but also provides excellent corrosion resistance, making them perfect for use in both wood and wet environments. The package includes 25 screws, which is a good quantity for various projects. The screws fit perfectly into my DIY projects, and the countersunk heads sit flush, giving a clean and professional look. The price is very reasonable for the quality and quantity, making this a great value for money. Highly recommended!",
+        "predicted_review": "These screws are awesome. Super strong and great quality alloy steel. They hold tight and the black oxide finish looks cool. Thumbs up."
+    },
+    {
+        "task_id": 21,
+        "user_id": "AGFOYN7OR24EBWRKRW7PZFLEDERA",
+        "item_id": "B0C3LHMKVN",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I\u2019m extremely satisfied with the Hercules DS536B Baritone and Alto/Tenor Sax Stand. The sturdiness and stability of the stand are top-notch, ensuring my instruments are safe and secure. The adjustable height and the ability to hold multiple instruments make it incredibly versatile. The swivel legs and folding design are a plus for easy storage and transport. The professional appearance and build quality are exactly what I expect from a premium stand. Despite the slight weight, it\u2019s a small price to pay for such reliability and functionality. Highly recommend!",
+        "predicted_review": "This stand is incredibly effective, securely holding my baritone saxophone with its locking yoke and adjustable backrest. The added alto/tenor sax peg is a brilliant, practical feature, allowing me to store two instruments efficiently and save valuable floor space. Its stable swivel legs fit perfectly around my other gear, and it folds down compactly for easy storage. This is a truly reliable and easy-to-use solution."
+    },
+    {
+        "task_id": 22,
+        "user_id": "AFCDDK44YLM5OXH7RDFJWH4W7NVA",
+        "item_id": "B09Q39C7W2",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Donner DC-2 Guitar Capo is a fantastic addition to my collection of musical tools. Its lightweight, high-quality zinc alloy construction ensures durability and ease of use, making it perfect for quick changes on stage or during practice. The soft rubber pads provide a firm grip without causing any damage to my guitar, and the high-performance steel spring maintains tuning accuracy. The cinnamon color is a nice touch, adding a bit of style to the practical design. Overall, it's a reliable, well-made capo that delivers exactly what I need at a great value.",
+        "predicted_review": "This Donner capo is a solid win! It delivers perfect sound with no fret buzz, which is exactly what I need from a reliable piece of gear. It's super easy to use one-handed for quick changes, and the soft pads mean no worries about scratching my guitar. No more messing around with unreliable capos \u2013 this one just works. \ud83d\udc4d"
+    },
+    {
+        "task_id": 23,
+        "user_id": "AFXCK24DK3RJ32NHWDVEA44NNHCQ",
+        "item_id": "B07F6GSN2J",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "This heat shrink tubing set from Tabiger is a solid choice for anyone looking for a variety of sizes and colors. The organized storage box is a great touch, making it easy to keep everything in order. The product works well and provides good value for the money, which is a plus. However, I did notice that a blow dryer didn't work for shrinking the tubing, and using a lighter left some black marks. Despite these minor issues, the overall quality and functionality are impressive, and it's a reliable option for most DIY projects.",
+        "predicted_review": "Okay, so this isn't exactly a new Nintendo game, but WOW, this heat shrink tubing kit is AWESOME! The variety of colors and sizes is like having a whole palette of power-ups for my cables, and the way it shrinks perfectly is super satisfying \u2013 talk about responsive controls! Plus, it comes in a totally organized storage box, which is a game-changer for keeping everything neat. This kit is a 5-star winner for keeping my gear in top shape!"
+    },
+    {
+        "task_id": 24,
+        "user_id": "AHCNQOYQCGQ7XC3KBWY437DXISSA",
+        "item_id": "B00YOJIEKG",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "\"Brothers - A Tale of Two Sons\" is a unique and emotionally engaging experience. The innovative control scheme, where you manage two characters simultaneously, adds a layer of depth and challenge that I found refreshing. The game's visuals and storytelling are top-notch, making it a memorable journey. However, the learning curve was a bit steep, and the game's relatively short playtime might not satisfy those looking for a longer adventure. Despite these minor drawbacks, it's a well-crafted game that I would recommend to both casual and hardcore gamers.\"",
+        "predicted_review": "While \"Brothers\" offers an innovative dual-stick control scheme and commendable graphics, the \"Refurbished and Sealed\" description for a game disc is immediately confusing and raises significant quality control concerns. Furthermore, the \"co-op in single player mode\" is misleading, creating a compatibility issue with user expectations for traditional multiplayer. The biggest drawback, and a major defect in my book, is the extremely short gameplay, reportedly completable in a single day. Despite its unique concept, these fundamental flaws in product description and content prevent a higher rating."
+    },
+    {
+        "task_id": 25,
+        "user_id": "AFQD774LWOUW2DT5NYFDAUYJVW3A",
+        "item_id": "B0BMKQ9W4V",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "The Bluechok Lavalier Microphone is a decent option for its price, offering good sound quality and ease of use, which aligns with my preference for cost-effective and functional products. However, the short cable length is a significant drawback, limiting mobility and usability, especially for setups requiring more flexibility. Additionally, the microphone's tendency to pick up background noise, while not severe, is a minor annoyance. Overall, it's a solid choice for basic needs but falls short in some key areas.",
+        "predicted_review": "For its low price, this Bluechok lavalier mic offers surprisingly good audio quality, making it a fantastic budget option for smartphone recordings and video calls. However, the product description really needs to clarify that this is primarily a TRRS mic, meaning it's designed for phones and tablets, not standard TRS PC inputs without an adapter \u2013 a crucial detail that cost it a star. Once you understand that specific compatibility, it's a clear, functional mic that performs well above its price point, though the 5-foot cord can be a bit short for some setups."
+    },
+    {
+        "task_id": 26,
+        "user_id": "AH3SWU3TB35OOXEZPP56B4MQOJOQ",
+        "item_id": "B0BS91NVKR",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I recently picked up the Wrugste Microphone Cable, and I must say I'm thoroughly impressed. The build quality is top-notch, with a robust PVC skin and high-quality connectors that ensure durability. The sound quality is clear and distortion-free, making it suitable for both live performances and studio recording. The cable is also very affordable, offering great value for the price. The spring strain relief is a nice touch, although it might be a bit overkill for some applications. Overall, this cable meets all my needs and exceeds my expectations, especially for its price point. Highly recommended!",
+        "predicted_review": "Wow, this Wrugste Microphone Cable is an absolute gem for the price! The sound quality is crystal clear with no interference, and it feels incredibly durable, like it's built to last through countless gigs. It's super easy to connect and works flawlessly with all my gear, making it an unbeatable value for anyone needing a reliable XLR cable on a budget. Seriously, if you're looking for quality sound and robust construction without breaking the bank, grab this one!"
+    },
+    {
+        "task_id": 27,
+        "user_id": "AG45Z5DKQSNV4YRNP2SUGCPF2ETQ",
+        "item_id": "B07DLCDT3N",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The American Plating 150CN American Fife is a mixed bag for me. While I appreciate its durable build and the fact that it's made in the USA, the initial tuning issues and the cold, uncomfortable feel of the metal body are significant drawbacks. The sound quality is decent but requires some tweaking and practice to get right. For the price, it's a reasonable purchase, but it doesn't quite meet my high standards for build quality and user experience.",
+        "predicted_review": "Okay, so this American Fife isn't a gaming mouse, but holy moly, the build quality on this nickel-plated brass is absolutely top-tier, feeling super durable just like a premium controller! \u2728 It's got that legit retro vibe, being part of USA history since George Washington's days, and for under $40, it's an absolute steal \u2013 serious bang for your buck, no cap! \ud83d\ude0e Learning to play is a whole new skill tree to unlock, kinda like mastering a new game, and I'm totally here for the challenge! GG, fife! \ud83d\udd25"
+    },
+    {
+        "task_id": 28,
+        "user_id": "AEGV3GGA7C5VP42BBPE3UOR4RQLQ",
+        "item_id": "B0C2VGQYQ8",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "The Ingles Adjustable Folding Cello/Bass Stand (SA-22) is a solid investment for any musician. Its sturdy build and adjustability make it a reliable choice for keeping my cello safe and ready to play. The fold-down safety bar and bow holder are particularly useful, ensuring that my instrument and accessories are securely stored. However, the stand's bulkiness and some minor design issues, such as the flexibility in the neck holder, are slight drawbacks. Overall, it's a well-made product that offers good value for the price, but there's room for improvement in terms of portability and design refinement.",
+        "predicted_review": "The Ingles Cello/Bass Stand offers solid instrument support and protection, with practical features like the extended endpin capability and a useful bow holder. However, its \"folding\" functionality is poorly described, lacking crucial details on how it folds or its compact dimensions, which significantly impacts its utility for storage or transport. Furthermore, the inclusion of \"Connector type: Auxiliary\" in the features list is an irrelevant and confusing error, highlighting a concerning lack of precision in the product information."
+    },
+    {
+        "task_id": 29,
+        "user_id": "AG4INUTVAJH34XM4WTO75TC5VN7Q",
+        "item_id": "B075J3DSHT",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "The ZYLtech 3D Printer Filament PLA with 12% real wood particle content is a mixed bag. While it offers a wood-like appearance and scent, which is a plus for DIY projects, the filament is quite brittle and prone to breaking. The poor spool winding also causes issues, leading to jams and inconsistent prints. Despite these drawbacks, the ease of use and strong adhesion to the printer bed are commendable. However, given my preference for durable and well-designed tools, this product falls short of my expectations.",
+        "predicted_review": "This ZYLtech wood PLA proved a frustrating challenge for functional printing, primarily due to abysmal spool winding that caused frequent snags and print failures, alongside inconsistent extrusion and recurring clogs. While I eventually coaxed decent bed and interlayer adhesion, the extensive troubleshooting, manual intervention, and even nozzle replacement required to overcome these core manufacturing flaws made reliable printing a constant battle. The \"wood\" aesthetic, though present, is underwhelming, making this filament a difficult recommendation for anyone prioritizing consistent, dependable results."
+    },
+    {
+        "task_id": 30,
+        "user_id": "AHZDCFJHZPVJF4U4LPULA4PPWKKQ",
+        "item_id": "B0723DMGMP",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "The ProMark ActiveGrip Forward 5B Drumsticks are a standout product, aligning perfectly with my preference for high-quality, durable, and well-designed tools. The ActiveGrip coating is a game-changer, providing excellent traction even when hands are sweaty, which is crucial for maintaining control during intense performances. The acorn tip offers a larger sweet spot, enhancing responsiveness and articulation. The balance and weight are well-suited for both beginners and experienced drummers, making them versatile and comfortable to use. These drumsticks are built to last and perform reliably, making them a great value for the money.",
+        "predicted_review": "These ProMark ActiveGrip Forward 5B drumsticks present a compelling case study in effective material application and thoughtful design, akin to a precision tool. The heat-activated ActiveGrip coating genuinely enhances control as play intensifies, providing a secure yet non-abrasive hold, while the reinvented acorn tip offers superior articulation and a consistent sweet-spot. With a purposeful forward balance contributing to power and speed, and robust construction, these sticks deliver tangible performance benefits that justify their value for serious players seeking enhanced control and durability."
+    },
+    {
+        "task_id": 31,
+        "user_id": "AG4VE5CY24LOGCZO5U2VDKMAQELA",
+        "item_id": "B01LR7W3OU",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Micro Swiss Plated Nozzle is a fantastic upgrade for my LulzBot TAZ 5. The TwinClad XT coating makes it incredibly easy to clean, and the print quality has noticeably improved with cleaner lines and better adhesion. The nozzle is durable and works seamlessly with various filaments, making it a great value for the price. Highly recommend!",
+        "predicted_review": "Fine. Fine. Fine. Fine."
+    },
+    {
+        "task_id": 32,
+        "user_id": "AHOWQNKHHVP2CCEHGT3ELR2MAK2A",
+        "item_id": "B00VE5VZ86",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 2.0,
+        "ground_truth_review": "The Pandaren Pack of 8 pcs Thumb Grip Thumbstick is a mixed bag. On the positive side, the variety of sizes and designs is a nice touch, and it does enhance the grip and control, which is beneficial for longer gaming sessions. However, the caps tend to fall off easily, especially during intense gameplay, which can be frustrating. The fit is inconsistent across different controllers, and the durability leaves something to be desired. While it\u2019s a decent value for the price, the issues with staying in place and the occasional poor fit make it a product that doesn\u2019t fully meet my expectations.",
+        "predicted_review": "I was genuinely excited for these Pandaren thumb grips, hoping they'd boost my precision and comfort for epic gaming adventures. But honestly, what a letdown! The grips, especially the taller ones, constantly pop off my controller sticks, completely pulling me out of the immersive experience. There's nothing fun or exciting about fumbling with your controller mid-game, so my advice is to skip these and find grips that actually stay put."
+    },
+    {
+        "task_id": 33,
+        "user_id": "AE3WPWZMSMWNXK7B24IHL6KK3TSQ",
+        "item_id": "B01LZBHHC2",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "The Dreamtop 9 Pcs Guitar Radius Gauge set is a useful and affordable tool for any guitarist or luthier. The gauges are accurate and cover a wide range of common radii, making them perfect for setting up guitars and basses. However, the sharp edges are a concern, as they could potentially damage instruments if not handled carefully. The build quality is decent but could be improved for a more durable feel. Overall, it\u2019s a solid investment for the price, but some minor adjustments would make it a perfect tool.",
+        "predicted_review": "While these Dreamtop radius gauges are made of durable stainless steel and are very portable, their fundamental flaw lies in accuracy. Several gauges, despite being labeled with different radii, appear to have identical or very similar cuts, rendering them unreliable for precise fretboard, saddle, or nut measurements. This significantly undermines their purpose, making them largely unsuitable for anyone needing accurate instrument setup, even at their low price point. For serious work, I'd advise investing in a more reliable set."
+    },
+    {
+        "task_id": 34,
+        "user_id": "AGWGI3DURL56CYGNN6JKGNJIYWXA",
+        "item_id": "B000M2SQ98",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 1.0,
+        "ground_truth_review": "This copper tubing is exactly what I needed for my home project. It is of high quality, well-made, and very durable. The soft coils make it easy to work with, and it arrived in perfect condition with fast shipping. I appreciate the versatility of the product, as it can be used for a variety of applications. Highly recommend!",
+        "predicted_review": "This \"copper tubing\" is an absolute JOKE. The inner diameter is so laughably small, you can barely get air through it, let alone any liquid for A/C or ice makers as advertised. This isn't \"great quality\" or effective; it's a complete and utter FAILURE for its intended purpose and a total WASTE of money."
+    },
+    {
+        "task_id": 35,
+        "user_id": "AGHLSOHS5UPWUWLESOBGAM2U3QIA",
+        "item_id": "B0BVHZWFN5",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "This hex nut set from NINDEJIN is a solid addition to any toolbox. The assortment of sizes, especially the smaller metric nuts, is very useful for a variety of DIY projects. The plastic storage box with labeled compartments is a great touch, making it easy to find and organize the nuts. The quality is good, with a nice finish and a robust feel. However, I do wish the nuts were a bit thicker for more heavy-duty applications. Overall, it's a great value for the price and meets most of my needs.",
+        "predicted_review": "Wow, even though this isn't a new guitar pedal, this NINDEJIN Hex Nuts Assortment Kit is an absolute game-changer for anyone who loves to keep their musical gear in top shape! The incredible versatility with 9 different metric sizes means I always have the perfect fit for everything from amp stands to pedalboards, ensuring all my equipment is perfectly secure and performing its best. The premium carbon steel quality and brilliant organized storage make this a truly practical, high-performance item that saves time and frustration, letting me focus on making music! This kit is an absolute must-have for any musician or hobbyist who values reliable, top-notch equipment!"
+    },
+    {
+        "task_id": 36,
+        "user_id": "AFMYQ7BZTGJIK2ZXF7SWFKB2H7PA",
+        "item_id": "B01CWN4I8C",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I'm thoroughly impressed with these Rok Hardware wood screws. As a guitar enthusiast, I appreciate quality and durability in my tools and accessories, and these screws deliver on both fronts. The deep Phillips recess ensures minimal bit slippage, making them a breeze to use. They provide excellent holding power in various materials, which is perfect for my DIY guitar projects and around the house. The nickel plating is a nice touch, adding a professional look and preventing corrosion. At this price point, they're a fantastic value and a must-have for any woodworker or DIY enthusiast.",
+        "predicted_review": "OH MY GOSH, these Rok Hardware screws are an absolute GAME CHANGER for any aspiring guitarist like me who loves a good DIY project! The incredible value for 100 screws means more budget for my next Fender strap or a new set of picks, and they're super easy to use with that deep Phillips head \u2013 no more slipping! Whether I'm building a new guitar stand or securing a pedalboard, these screws provide rock-solid hold, making everything feel so much sturdier and more professional. I am SO thrilled with these; they're perfect for all my guitar DIY needs!"
+    },
+    {
+        "task_id": 37,
+        "user_id": "AF4PR7OYW2WRKR5GZFW6IXOEYI2A",
+        "item_id": "B095XD8DH7",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The ABLAZE Stainless Steel Vacuum Chamber/Tube is a solid investment for anyone looking for a durable and high-quality product. The 90 Gram capacity and the included Viton gasket with a stainless screen are impressive features that ensure reliability and efficiency. The large silicone mat is a nice touch, although it would be better if it had holes for better placement. The tripod is stable, but I did experience some alignment issues with the rubber feet. Overall, it's a well-built and efficient product that meets my needs, but the lack of detailed instructions and user support is a slight drawback.",
+        "predicted_review": "As someone who demands top-tier functionality and performance from my gear, this ABLAZE Stainless Steel Vacuum Chamber is an absolute standout. The robust stainless steel construction and reliable Viton gasket ensure an airtight seal and flawless vacuum retention, making my specialized processing incredibly efficient. I particularly appreciate the integrated tripod for stability and the generous 90-gram capacity, which truly streamlines my workflow much like a perfectly tuned 3D printer, easily earning it a 5-star rating."
+    },
+    {
+        "task_id": 38,
+        "user_id": "AHUYTACGBOHVE4ZKGMAHD3NSDZ2Q",
+        "item_id": "B07J33Z1B3",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Eastar Bb Tenor Slide Trombone is a mixed bag. On the positive side, it comes with a complete package, including gloves, a cleaning kit, and a hard case, which is great for beginners. The sound quality is decent, and it's lightweight, making it easy for younger players to handle. However, the build quality is a letdown. The slide isn't as smooth as it should be, and the materials feel cheap, which is a concern for durability. While it's a good option for beginners, it may not last long or meet the needs of more advanced players. The price point is reasonable, but the quality issues make it hard to recommend without reservations.",
+        "predicted_review": "This Eastar trombone is an absolute winner for beginners! The value is incredible, coming with a hard case, mouthpiece, and cleaning kit \u2013 way better than renting. It's super easy to use and maintain, built tough, and delivers a clear, band-approved sound. Seriously, this thing performs exactly as promised."
+    },
+    {
+        "task_id": 39,
+        "user_id": "AE6T6XTZ2VVRDVKJBT7AZK5XUOSA",
+        "item_id": "B077D9Y9YD",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I am very satisfied with these Stainless Steel Thin Jam Nylon Insert Lock Nuts. They are exactly what I needed for my project. The quality is top-notch, and they are easy to install, staying securely in place. The thin design is perfect for tight spaces, and the stainless steel construction ensures they will last. A great value for the price, and highly recommended for anyone looking for reliable lock nuts.",
+        "predicted_review": "Good prodoct. It is good. Very good."
+    },
+    {
+        "task_id": 40,
+        "user_id": "AHUYXFVKYGKK6WHIZOGJ5P7VKJXA",
+        "item_id": "B01M12PMOW",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "While \"Super Mario 64 - Wii U\" is a classic and has a lot of nostalgic value, it didn't quite hit the mark for me. The gameplay is smooth and enjoyable, and it\u2019s a must-have for any fan of the series. However, I encountered some initial issues with code activation, which were frustrating and time-consuming. I eventually got it to work, but the experience dampened my enthusiasm. Additionally, the non-returnable and non-refundable policy is a significant downside, especially if there are any problems. Overall, it's a good game, but the activation process and lack of customer support made it less than ideal.",
+        "predicted_review": "Got this digital code instantly, which was super easy to redeem and get running on the Wii U. The game works perfectly, no fuss at all. Super Mario 64 is a classic for a reason\u2014still holds up and plays great."
+    },
+    {
+        "task_id": 41,
+        "user_id": "AH6N5QUY6DXJEC7PD7SEACM5476A",
+        "item_id": "B0C858LJVK",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The Nilight crimp terminal kit is a solid addition to my toolbox, offering a variety of sizes for different wiring needs. The high-quality nylon caps and tin-plated copper ferrules ensure reliable connections, and the translucent tubing allows for easy visual inspection. While the single-use nature and occasional quality issues with some caps breaking off are minor drawbacks, the overall value and ease of use make this a worthwhile purchase. Highly recommended for DIY projects and repairs.",
+        "predicted_review": "This Nilight crimp terminal kit is a solid choice for reliable electrical work. The high-quality nylon and tin-plated copper ensure secure, insulated connections, effectively preventing shorts. With a convenient range of gauges and translucent tubing for visual inspection, this kit offers excellent design and performance for any wiring project."
+    },
+    {
+        "task_id": 42,
+        "user_id": "AF3VTRQCWRXN2D2OGVSJYSHAD5JA",
+        "item_id": "B005UDTIVY",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 3.0,
+        "ground_truth_review": "The Medeli DD305 Electronic Drum Pad is a decent option for beginners, offering a good range of features at a reasonable price. However, the build quality and responsiveness of the pads and pedals are a bit lacking, which can be frustrating for more serious practice. While it's portable and suitable for practice on the go, the limited sensitivity and durability are issues that might not align well with my preferences for durable and high-quality gaming accessories. It's a solid choice for novices, but it falls short for those looking for a more robust and responsive drumming experience.",
+        "predicted_review": "As someone who prioritizes precision and reliable input in hardware, the Medeli DD305 is a profound disappointment. Its drum pads are frustratingly inconsistent, often requiring excessive force to register, while the flimsy foot pedals frequently double-trigger, completely sabotaging any attempt at consistent rhythm or nuanced play. Despite its portability and MIDI capabilities, these fundamental flaws render it an incredibly unreliable and frustrating experience, akin to a gaming controller where buttons fail to register or ghost-press, utterly breaking the immersion and functionality. For serious practice or recording, this device is more of a hindrance than a useful tool."
+    },
+    {
+        "task_id": 43,
+        "user_id": "AGCDQHV2SKUVOUXLXFZVUPIM6XPQ",
+        "item_id": "B00MXUIICM",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I was pleased with the Aquila Super Nylgut AQ-104 Concert Ukulele Strings. The natural pearl color and super-smooth playing surface make them a joy to play. They offer excellent intonation and are less stretchy than other strings, which means they stay in tune better. The only minor issue is the initial stiffness, but it settles quickly after a few uses. The price is fair for the quality and performance you get, making these strings a solid choice for both beginners and experienced players.",
+        "predicted_review": "Alright, these Aquila Super Nylgut strings are a serious performance upgrade, like a 1.0.4 patch that actually fixes bugs and boosts framerates. The tuning stability is a game-changer \u2013 no more controller drift \u2013 and the super-smooth playing surface makes every session feel buttery. With perfect intonation and long-wearing qualities, these are built for extended play and deliver a crisp, clear sound that's a definite win."
+    },
+    {
+        "task_id": 44,
+        "user_id": "AGA4Y57YV53VWBPNQOVTI4OIKOWA",
+        "item_id": "B086JG935T",
+        "ground_truth_stars": 2.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The pH and TDS meter combo seems like a promising tool for various testing needs, but my experience was quite disappointing. The TDS meter worked well and provided accurate readings, which is a plus. However, the pH meter was a different story. It struggled with calibration, providing inconsistent and unreliable results, which is a significant issue for me. Given my preference for high-quality and reliable products, this inconsistency is a deal-breaker. The product also arrived with missing parts, which further adds to the frustration. While the price point is reasonable, the lack of reliability and completeness means I cannot recommend this product.",
+        "predicted_review": "This PH and TDS meter combo is a total winner. Readings are incredibly accurate and lightning-fast, with calibration being an absolute breeze. It feels solid, not flimsy, and both meters perform flawlessly, making it a truly dependable tool."
+    },
+    {
+        "task_id": 45,
+        "user_id": "AHMIK6TM7QK236FTGWPHTMIGERHQ",
+        "item_id": "B01M329Y0W",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "I was pleasantly surprised by the Harmony Audio HA-KEYSTAND. As a drummer who appreciates quality and durability, this stand met all my expectations. The heavy-gauge metal construction ensures it can handle the weight of my keyboards, and the stability is excellent, even with lighter gear. The 2-tier design with adjustable heights and the 5/8\" mic mount are perfect for my setup. The only minor downside is the lack of a carrying handle, but the stand is still manageable. Overall, it's a solid investment for any musician.",
+        "predicted_review": "WOW! As a drummer obsessed with precision and performance, I'm absolutely blown away by the Harmony Audio HA-KEYSTAND \u2013 it's a total game-changer for integrating my drum machines and auxiliary percussion! The rock-solid, all-steel construction and incredibly stable 3-leg design mean my gear is absolutely locked in, providing the unwavering foundation I demand, just like my favorite snare stands. The independent height adjustments are an ergonomic dream, allowing me to perfectly position my electronic pads for seamless transitions, while the unexpected mic mount adds brilliant versatility to my setup. This stand embodies the high-quality, performance-enhancing design I seek in all my equipment, making it an indispensable secret weapon for any drummer looking to elevate their sound!"
+    },
+    {
+        "task_id": 46,
+        "user_id": "AGA76VNCFMT2N3XOHCOCW37CGDCA",
+        "item_id": "B08T2LJ62N",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 5.0,
+        "ground_truth_review": "The TC Electronic POLYTUNE 3 MINI is an outstanding tuner that perfectly fits my needs. The polyphonic tuning mode is incredibly fast and accurate, making it a game-changer for quick setup before gigs or practice sessions. The built-in buffer is a fantastic feature that keeps my tone crisp, even with long cables. The compact size and user-friendly design make it a no-brainer for any guitarist, whether professional or casual. Highly recommended!",
+        "predicted_review": "This tuner is exactly what's needed. It's incredibly accurate and fast, making tuning simple and reliable every time. The polyphonic mode is a game-changer, and its compact size with the built-in buffer is perfect."
+    },
+    {
+        "task_id": 47,
+        "user_id": "AHQWZJ2P3KY5HK3M73NGI4ZGHHWA",
+        "item_id": "B08KVLVJ86",
+        "ground_truth_stars": 5.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "This Adjustable Height Neck Caul is an excellent addition to any guitar tech's toolkit. The adjustable feet allow for a perfect fit on a wide range of guitars, and the stable hardwood construction ensures that it will last. The felt-lined surface is a great touch, protecting the neck finish without compressing like cork. The non-skid surface is also a plus, keeping the neck in place while you work on leveling frets. Overall, it's a well-designed, durable, and versatile tool that meets all my needs and more.",
+        "predicted_review": "For critical guitar work like fret leveling, consistent neck support is non-negotiable, and this Adjustable Height Neck Caul largely delivers on that promise. Its robust African Mahogany construction, paired with genuinely effective adjustable feet and a non-compressing felt surface, provides the crucial stability required for microscopic precision. While its design accommodates a wide range of guitar types, a minor refinement could make it universally perfect for every conceivable body shape. Nevertheless, this is a thoughtfully engineered tool that justifies its price by effectively eliminating the bounce and inconsistency common with lesser supports."
+    },
+    {
+        "task_id": 48,
+        "user_id": "AFUXYGCPLZYMX7TBF45BXY5E5RDQ",
+        "item_id": "B0BGZC6GZ5",
+        "ground_truth_stars": 3.0,
+        "predicted_stars": 1.0,
+        "ground_truth_review": "I found the PHOINIKAS PS4 Gaming Headset to be a mixed bag. The sound quality is decent, and the noise-canceling microphone works well enough for casual use, but the ear cups are a bit small and not very comfortable for extended gaming sessions. The LED lights are a nice touch, but they can be too bright, and I had to turn them off. The headset is lightweight and durable, which is a plus, but the lack of bass is noticeable. For the price, it's a decent option, but it falls short of being a top pick for serious gamers.",
+        "predicted_review": "As a guitarist meticulously focused on sculpting versatile rock/metal tones through my American Stratocaster and Fender Hot Rod Deluxe, this PHOINIKAS gaming headset offers absolutely zero utility. Its 7.1 surround sound and noise-canceling mic are designed for gaming immersion, not the critical, analytical listening required to evaluate a pickup's bottom end or an amp's crunch. There's simply no way to assess its impact on my signal chain or sonic characteristics, making it entirely irrelevant to my gear setup and pursuit of tone."
+    },
+    {
+        "task_id": 49,
+        "user_id": "AFMKDL3TWH2BKGSUDR6RAOCRCFYQ",
+        "item_id": "B002BAZNHW",
+        "ground_truth_stars": 4.0,
+        "predicted_stars": 4.0,
+        "ground_truth_review": "The Hamilton KB500 Classic Trumpet Stand is a solid and reliable choice for any musician. The stand is well-built, with a sturdy metal construction that ensures my trumpet stays safe and stable. The rubber bell cup provides excellent cushioning, and the lightweight design makes it easy to move around. At $28.99, it's a bit pricier than some stands, but the quality and durability are worth it. The only minor downside is the slight weight, but it's a small price to pay for a stand that will last for years. Overall, a great investment for any trumpet player.",
+        "predicted_review": "My kid just started trumpet lessons, and let me tell you, we needed a place for that horn besides the couch (almost had a disaster, true story!). This Hamilton KB500 stand is exactly what the doctor ordered \u2013 it's built like a tank, super sturdy with zero wobbles, and that rubber bell cup keeps the trumpet safe from any dings. It folds up nice and compact for lessons or just stashing it, making it a total no-brainer for functionality and value, especially for a beginner. It just does what it's supposed to do, no fuss!"
+    }
+]

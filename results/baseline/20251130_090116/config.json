@@ -1,0 +1,8 @@
+{
+    "exp_name": "baseline",
+    "timestamp": "20251130_090116",
+    "memory_type": "none",
+    "use_reflection": false,
+    "model": "gemini-2.5-flash",
+    "task_count": 5
+}

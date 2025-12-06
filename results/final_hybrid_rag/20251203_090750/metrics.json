@@ -1,0 +1,14 @@
+{
+    "type": "simulation",
+    "metrics": {
+        "preference_estimation": 0.8680000000000001,
+        "review_generation": 0.8521227844169839,
+        "overall_quality": 0.860061392208492,
+        "rmse": 1.0535653752852738
+    },
+    "data_info": {
+        "evaluated_count": 50,
+        "original_simulation_count": 50,
+        "original_ground_truth_count": 400
+    }
+}

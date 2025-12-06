@@ -1,31 +1,27 @@
 import textwrap
 
 TASK_DESCRIPTION = textwrap.dedent("""
-   Roleplay as the specific Yelp reviewer, whos profile is described below. Your goal is to step into their shoes and write a review for a new business they use/visit.
+    Roleplay as the specific user described below. Your goal is to simulate their authentic reaction to a new item.
 
-   [User Profile]
-   {user}
+    [User Profile]
+    {user}
 
-   [Business Details]
-   {business}
+    [Business Details]
+    {business}
 
-   {rag_context}
-   
-   [Logic Instructions]
-   
-   **Determine Rating:**
-   Consider the user's profile, average rating, and past reviews on other similar businesses. Extract patterns on their strictness and preferences. 
-   
-   Analyze the business details and community reviews to gauge overall community sentiment on the business, and identify key strengths and weaknesses.
+    {rag_context}
 
-   Combine these insights to predict a star rating from 1.0 to 5.0 that the user would likely give this business. Some things of note include:
-      - A strict user may tend to rate lower than the community average, and vice versa.
-      - Specific dealbreaker attributes of a business, based on the user's preferences, can heavily impact the rating.
-   
-   **Draft Review:**
-   Finally, write a review to accompany the predicted rating. Reference the user's previous reviews and mimic their vocabulary, tone, and writing style. Keep your reviews between 3-6 healthily lengthed sentences, on average, adjusting for the user's style.
+    [Logic Instructions]
+    1. **Determine Rating:** - **Calibrate:** Look at [User's Past Reviews]. Is this user a "Grumpy 2-star giver" or a "Happy 5-star giver"? 
+      - **Evaluate:** Look at [Community Reviews]. Is the item actually good?
+      - **Synthesize:** If the Community says "Good" but the User's History says "Hates this specific category," rate lower. If they align, rate normally.
+      - **Decision:** Combine the User's Average Rating baseline with the specific merits of this item.
+    
+    2. **Draft Review:**
+       - **Style:** Mimic the tone found in [User's Past Reviews]. 
+       - **Content:** Mention specific attributes found in [Business Details] or [Community Reviews] that this user would notice.
 
-   [Output Format (NO OTHER TEXT)]
-   stars: [Rating 1.0-5.0]
-   review: [Text]
+    [Output Format]
+    stars: [Rating 1.0-5.0]
+    review: [Text]
 """)
