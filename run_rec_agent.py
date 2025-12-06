@@ -2,12 +2,12 @@ import json
 from websocietysimulator import Simulator
 from websocietysimulator.agent import RecommendationAgent
 import tiktoken
-from websocietysimulator.llm import LLMBase, InfinigenceLLM
+from websocietysimulator.llm import LLMBase
 from websocietysimulator.agent.modules.planning_modules import PlanningBase
 from websocietysimulator.agent.modules.reasoning_modules import ReasoningBase
 import re
 import logging
-import time
+import argparse
 logging.basicConfig(level=logging.INFO)
 
 def num_tokens_from_string(string: str) -> int:
@@ -18,47 +18,10 @@ def num_tokens_from_string(string: str) -> int:
         print(encoding.encode(string))
     return a
 
-class RecPlanning(PlanningBase):
-    """Inherits from PlanningBase"""
-    
-    def __init__(self, llm):
-        """Initialize the planning module"""
-        super().__init__(llm=llm)
-    
-    def create_prompt(self, task_type, task_description, feedback, few_shot):
-        """Override the parent class's create_prompt method"""
-        if feedback == '':
-            prompt = '''You are a planner who divides a {task_type} task into several subtasks. You also need to give the reasoning instructions for each subtask. Your output format should follow the example below.
-The following are some examples:
-Task: I need to find some information to complete a recommendation task.
-sub-task 1: {{"description": "First I need to find user information", "reasoning instruction": "None"}}
-sub-task 2: {{"description": "Next, I need to find item information", "reasoning instruction": "None"}}
-sub-task 3: {{"description": "Next, I need to find review information", "reasoning instruction": "None"}}
-
-Task: {task_description}
-'''
-            prompt = prompt.format(task_description=task_description, task_type=task_type)
-        else:
-            prompt = '''You are a planner who divides a {task_type} task into several subtasks. You also need to give the reasoning instructions for each subtask. Your output format should follow the example below.
-The following are some examples:
-Task: I need to find some information to complete a recommendation task.
-sub-task 1: {{"description": "First I need to find user information", "reasoning instruction": "None"}}
-sub-task 2: {{"description": "Next, I need to find item information", "reasoning instruction": "None"}}
-sub-task 3: {{"description": "Next, I need to find review information", "reasoning instruction": "None"}}
-
-end
---------------------
-Reflexion:{feedback}
-Task:{task_description}
-'''
-            prompt = prompt.format(example=few_shot, task_description=task_description, task_type=task_type, feedback=feedback)
-        return prompt
-
 class RecMemory:
     """
-    Extremely compact, per-task memory for user preferences.
-
-    - Input: raw review text (possibly long, noisy).
+    Compact, per-task memory for user preferences.
+    - Input: raw review text.
     - Output: exactly 5 sentences summarizing the user's preferences.
     - Stores a single profile string for the current task.
     """
@@ -81,11 +44,9 @@ class RecMemory:
         """
         if review_text:
             cleaned = review_text.strip()
-            print("RecMemory.__call__ got review_text:", repr(cleaned)[:200])
             if cleaned and cleaned not in ("[]", "{}", "None"):
                 self._user_profile = self._build_profile(cleaned)
             else:
-                # Optional: log once for debugging
                 print("RecMemory: review_text is empty / uninformative, skipping LLM.")
         return self._user_profile
 
@@ -122,21 +83,16 @@ User review history:
             print("RecMemory: error while summarizing reviews:", repr(e))
             return ""
         sentences = self._to_exact_n_sentences(raw, self.max_sentences)
-        print("RecMemory: prompt:", prompt)
-        print("RecMemory: built user profile:", sentences)
         return sentences
 
     def _to_exact_n_sentences(self, text: str, n: int) -> str:
-        """
-        Best-effort post-processing to ensure exactly n sentences.
-        Splits on '.', '!' or '?' and recombines.
-        """
+        # Best-effort post-processing to ensure exactly n sentences. Splits on '.', '!' or '?' and recombines.
+
         if not text:
             return ""
 
         # Rough split into sentences
-        import re as _re
-        parts = _re.split(r'([.!?])', text)
+        parts = re.split(r'([.!?])', text)
         sentences = []
         current = ""
 
@@ -171,14 +127,7 @@ class RecReasoning(ReasoningBase):
         self.memory = memory
 
     def __call__(self, task_description: str):
-        """
-        task_description already includes:
-          - candidate_list
-          - user history
-          - item info
-        We now ALSO include the 5-sentence user profile from memory,
-        and ask the model to output per-item scores in JSON.
-        """
+
         user_profile = ""
         if self.memory is not None:  # retrieve the stored profile
             user_profile = self.memory() or ""
@@ -243,9 +192,7 @@ Context for scoring:
 
 class MyRecommendationAgent(RecommendationAgent):
     """
-    Participant's implementation of SimulationAgent, updated to
-    incorporate winning-strategy ideas from baseline666, RecHackers,
-    and DummyAgent:
+    Implementation features:
       - platform-aware item feature engineering
       - platform-aware review filtering
       - prompt that emphasizes informative user + item text
@@ -375,9 +322,9 @@ class MyRecommendationAgent(RecommendationAgent):
     def _score_review(self, r: dict, platform: str) -> float:
         """
         Platform-specific scoring of reviews to select the most informative ones.
-        Mirrors the DummyAgent-style focus on 'useful/funny/cool' (Yelp),
+        Focus on 'useful/funny/cool' (Yelp),
         'verified purchase + date' (Amazon), and 'votes/comments/reading_status'
-        (Goodreads), but coded defensively since field names may vary.
+        (Goodreads).
         """
         if not isinstance(r, dict):
             return 0.0
@@ -428,7 +375,7 @@ class MyRecommendationAgent(RecommendationAgent):
     ) -> list[dict]:
         """
         Take all user reviews and keep the most informative ones,
-        sorted by a platform-aware score, DummyAgent-style.
+        sorted by a platform-aware score.
         """
         reviews = self._normalize_review_list(reviews_raw)
         if not reviews:
@@ -445,7 +392,7 @@ class MyRecommendationAgent(RecommendationAgent):
     def _format_reviews_for_prompt(self, reviews: list[dict], platform: str) -> str:
         """
         Convert structured reviews into a compact text block for the LLM.
-        We only keep a few key fields plus text to avoid blowing up tokens.
+        Keep a few key fields plus text to avoid blowing up tokens.
         """
         lines = []
         for r in reviews[:20]:
@@ -494,7 +441,7 @@ class MyRecommendationAgent(RecommendationAgent):
 
     def workflow(self):
         """
-        Largely follows the standard winning-agent workflow:
+        Workflow:
           1) query user info
           2) query candidate item info (platform-specific features)
           3) query & filter user reviews (platform-specific selection)
@@ -554,7 +501,6 @@ class MyRecommendationAgent(RecommendationAgent):
                 raw_reviews = self.interaction_tool.get_reviews(
                     user_id=self.task['user_id']
                 )
-                print("DEBUG raw_reviews for user", self.task['user_id'], "->", type(raw_reviews), repr(raw_reviews)[:500])
                 selected_reviews = self._select_informative_reviews(
                     raw_reviews,
                     platform=platform,
@@ -615,20 +561,16 @@ USER_INFO:
 CANDIDATE_ITEMS_INFO:
 {item_list}
 """.strip()
-        print("Final task_description for reasoning:", task_description)
         result = self.reasoning(task_description)
 
         candidate_list = list(self.task.get("candidate_list", []))
 
-        # --- New: parse JSON scores and sort in Python ---
         try:
-            import json
 
-            # Try to find a JSON array in the output (in case the model adds stray text)
+            # Try to find a JSON array in the output
             match = re.search(r"\[.*\]", result, re.DOTALL)
             if not match:
                 print("No JSON array found in LLM output. Falling back to candidate_list.")
-                print("Raw LLM output:", result)
                 return candidate_list
 
             json_str = match.group()
@@ -636,7 +578,6 @@ CANDIDATE_ITEMS_INFO:
 
             if not isinstance(parsed, list):
                 print("Parsed JSON is not a list. Falling back to candidate_list.")
-                print("Parsed:", parsed)
                 return candidate_list
 
             # Normalize and filter: keep only valid items with an id in candidate_list
@@ -656,8 +597,6 @@ CANDIDATE_ITEMS_INFO:
 
             if not scored_items:
                 print("No valid (item_id, score) pairs after filtering. Falling back to candidate_list.")
-                print("Raw LLM output:", result)
-                print("Parsed JSON:", parsed)
                 return candidate_list
 
             # Sort by score descending
@@ -666,34 +605,23 @@ CANDIDATE_ITEMS_INFO:
             # Extract ranking
             ranked_ids = [item_id for (item_id, _) in scored_items]
 
-            # For safety: ensure all candidate IDs are present (append missing in original order)
             missing = [cid for cid in candidate_list if cid not in ranked_ids]
             ranked_ids.extend(missing)
-
-            print("Raw LLM result:", result)
-            print("JSON_str:", json_str)
-            print("Parsed JSON:", parsed)
-            print("Scored_items:", scored_items)
-            print("Final ranked_ids:", ranked_ids)
 
             return ranked_ids
 
         except Exception as e:
             print("Format error when parsing JSON scores:", repr(e))
-            print("Raw LLM output:", result)
             return candidate_list
 
 
 
 
 from typing import List, Dict, Any, Optional
-import ast
 
 class DummyEmbeddingModel:
     """
-    Minimal embedding model stub so that parts of the framework
-    that expect embed_documents/embed_query don't crash.
-    It just returns constant vectors.
+    Minimal embedding model, returns constant vectors
     """
     def embed_documents(self, texts: List[str]) -> List[List[float]]:
         if texts is None:
@@ -703,36 +631,29 @@ class DummyEmbeddingModel:
     def embed_query(self, text: str) -> List[float]:
         return [0.0]
 
-from typing import List, Dict, Any, Optional
 from google import genai
-from google.genai import types  # for config, if you want
+from google.genai import types 
 import os
 from dotenv import load_dotenv
 
 class GeminiLLM(LLMBase):
     """
-    Real Gemini-backed LLM for the recommendation agent.
-    Wraps the official google-genai client.
+    Gemini-backed LLM for the recommendation agent.
     """
 
     def __init__(
         self,
-        model: str = "gemini-2.5-flash",  # or "gemini-3.0-pro" etc.
+        model: str = "gemini-2.5-flash",  
         api_key: Optional[str] = None,
     ):
-        # LLMBase expects a model name string
         super().__init__(model=model)
 
-        # Create Gemini client. If api_key is None, it will read GEMINI_API_KEY
-        # from the environment.
         load_dotenv()
         api_key = api_key or os.environ.get("GEMINI_API_KEY")
         if not api_key:
             raise ValueError("GEMINI_API_KEY not set and no api_key passed to GeminiLLM")
         self._client = genai.Client(api_key=api_key)
 
-        # You can reuse your dummy embedding model until you actually
-        # want real embeddings.
         self._embedding_model = DummyEmbeddingModel()
 
     def _extract_text_from_response(self, response) -> str:
@@ -751,7 +672,6 @@ class GeminiLLM(LLMBase):
 
             parts = getattr(content, "parts", None)
             if not parts:
-                # e.g., when finish_reason == MAX_TOKENS before any text
                 continue
 
             for part in parts:
@@ -794,59 +714,61 @@ class GeminiLLM(LLMBase):
             print("GeminiLLM error:", repr(e))
             return ""
 
-        # DEBUG: see raw response and finish_reason
-        print("Gemini raw response:", repr(response))
         for cand in response.candidates:
            print("Finish reason:", getattr(cand, "finish_reason", None))
 
         text = self._extract_text_from_response(response)
 
         if not text:
-            # Explicitly log instead of silently returning "['']"
             print("GeminiLLM: no text extracted from response, returning empty string.")
             return ""
 
         return text
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Run RecAgent simulation.")
+    parser.add_argument(
+        "--tasks",
+        type=int,
+        default=5,
+        help="Number of tasks to run in the simulation (default: 5).",
+    )
+    args = parser.parse_args()
+    num_tasks = args.tasks
+
     task_set = "amazon"  # "goodreads" or "yelp"
     # Initialize Simulator
-    simulator = Simulator(data_dir="./tiny_data", device="auto", cache=False)
+    simulator = Simulator(data_dir="./dataset", device="auto", cache=False)
 
     # Load scenarios
     simulator.set_task_and_groundtruth(
         task_dir=f"./example/track2/{task_set}/tasks",
         groundtruth_dir=f"./example/track2/{task_set}/groundtruth",
     )
-
-    # Set your custom agent
     simulator.set_agent(MyRecommendationAgent)
-
-    # Set LLM client
     simulator.set_llm(GeminiLLM(model="gemini-2.5-flash"))
 
-    # --- STEP 1: test run_simulation only ---
-    print("About to run simulation...")
+    print(f"About to run simulation on task_set={task_set} with {num_tasks} tasks...")
     agent_outputs = simulator.run_simulation(
-        number_of_tasks=3, enable_threading=False, max_workers=1
+        number_of_tasks=num_tasks,
+        enable_threading=False,
+        max_workers=1,
     )
-    print("Simulation finished. ") # Sample output for first task:", agent_outputs[:1])
 
-    # --- STEP 2: test evaluate separately ---
+    print("Simulation finished. ") 
+
     print("About to evaluate...")
     evaluation_results = simulator.evaluate()
     import math
     import glob
 
-    # Collect ground-truth labels in order
     gt_items = []  # ground-truth item_id per scenario
 
-    # Assuming groundtruth is a bunch of jsonlines or jsons in groundtruth_dir
     def extract_gt_index(path: str) -> int:
         """Extract numeric index from filenames like ground_truth3.json."""
-        base = os.path.basename(path)          # e.g. "ground_truth10.json"
-        m = re.search(r'(\d+)', base)          # find "10"
-        return int(m.group(1)) if m else 0     # defaul t 0 if no match
+        base = os.path.basename(path)          
+        m = re.search(r'(\d+)', base)         
+        return int(m.group(1)) if m else 0     
 
     gt_files = sorted(
         glob.glob(f"./example/track2/{task_set}/groundtruth/*.json*"),
@@ -860,7 +782,6 @@ if __name__ == "__main__":
         gt_item_id = gt_obj.get("ground truth")
 
         if gt_item_id is None:
-            # If schema different, print once to help debug
             print("WARNING: groundtruth schema unknown for", gt_path, "object:", gt_obj)
             gt_item_id = ""  # fallback; will be treated as "missing" below
 
@@ -872,17 +793,9 @@ if __name__ == "__main__":
         cand_list = task["candidate_list"]
         gt_id = gt_items[i]
 
-        print(f"Scenario {i}")
-        print("  GT item:", gt_id)
-        print("  In candidate_list?", gt_id in cand_list)
-        print("  In pred_list?", gt_id in pred_list)
-        print()
-
-
     # Compute RMSE of rank (1 = best possible)
     squared_errors = []
     for idx, (pred, gt_id) in enumerate(zip(agent_outputs, gt_items)):
-        # agent_outputs element can be either a dict with 'output' or already a list
         if isinstance(pred, dict) and "output" in pred:
             pred_list = pred["output"]
         else:
@@ -895,13 +808,11 @@ if __name__ == "__main__":
             print(f"[DEBUG] GT id {gt_id} not in prediction list for scenario {idx}")
 
         if gt_id in pred_list:
-            # rank index (1-based)
             rank = pred_list.index(gt_id) + 1
         else:
-            # Penalize missing item with "worst" rank (len+1)
             rank = len(pred_list) + 1
 
-        error = (rank - 1) ** 2  # target rank = 1
+        error = (rank - 1) ** 2  
         squared_errors.append(error)
 
     if squared_errors:
@@ -909,16 +820,13 @@ if __name__ == "__main__":
     else:
         rmse = None
 
-    # Attach RMSE into evaluation_results so it appears in the JSON
     if "metrics" not in evaluation_results:
         evaluation_results["metrics"] = {}
     evaluation_results["metrics"]["rmse_rank_1based"] = rmse
-    print("Custom RMSE (rank vs 1):", rmse)
+    print("RMSE:", rmse)
 
-    # --- STEP 4: save results with RMSE ---
-    import os
     os.makedirs("./results", exist_ok=True)
     with open(f'./results/evaluation_results_track2_{task_set}.json', 'w') as f:
         json.dump(evaluation_results, f, indent=4)
 
-    print("Done. Saved evaluation_results with RMSE.")
+    print("Done. Saved evaluation_results.")
